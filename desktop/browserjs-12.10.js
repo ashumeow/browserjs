@@ -1,4 +1,4 @@
-// jO9K+zWIUeWKuScsbAeFq7Y4NLgGAGDlIe0b/a5xgo6WD+G1/RoIjcYfB/HI6cvMYaGpZoyGWbSP8uBzmf61A+j0LwDUXTp2hmdeTUtUhGO+QzG1H22gUjjdO/dSzRc/KBfbj7NCc79occtnE7yW9jNzQz5INKs7IRYfa2iWhAdoO1EP5MbmyFGnekg8O0+AUqrxNF/5+amwJ/fHgIqdfCo9I7o6ENtykQdtGcodppvr0k/zzZfkv04RIHpcRTBULVc99v72soWasFdFhZRC/h15pD1IYIrdrMfY7T2HBBUlp4qMssXouGOg2E2oyjp162NTw+h9fLYi3c3drUuddA==
+// UZ1QOTExYB06y9ErCCxqd4tpU5POA0r5H7fIAyDlnHTwDDQcAtEWN7PlfZYvprs7kKsiuScgQUi022IwLHuM5pkBOZGQ1GNZ4TLfxcLusDmQDAZnyv2XXv9RKtxrucTu0kREFEPiXdWZyV9K+JsjzqL5/OvqhXFiXs5ovfMie5URVR7qxwQZigNy2SZDKIpnHmLNh3nMx6o0NODCWCHTPumZ55JAlNvIksIHUiALQDWIPDyYljkLEucrzwhxCd3Q1U9dT8le8dhvwQDXPN52mNImWDS3KvsZv0zHH4LWMWNzkpNljIG0DxK5fOBlkGdTRyXvqy0QTzE/6rhzxGZc7A==
 /**
 ** Copyright (C) 2000-2013 Opera Software ASA.  All rights reserved.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Desktop 12.10 core 2.12.388, August 12, 2013. Active patches: 309 ';
+	var bjsversion=' Opera Desktop 12.10 core 2.12.388, August 21, 2013. Active patches: 308 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -1154,9 +1154,6 @@ function undoFunctionKeypressEventRemoval(){
 	} else if(hostname.endsWith('pinterest.com')){
 		addCssToDocument('div.NoInput input[data-text-on="On"]{display: inherit !important;visibility: hidden;}');
 		log('PATCH-811, pinterest.com: Opera fails to update status of display:none checkbox');
-	} else if(hostname.endsWith('postdanmark.dk')){
-		addPreprocessHandler(/has_postMessage\s*=\s*window\[postMessage\]\s*&&\s*!\$\.browser\.opera;/, 'has_postMessage = true;',true,function(el){return el.src.indexOf('jquery.ba-postmessage.js')>-1;});
-		log('PATCH-1069, postdanmark.dk - remove sniff in jQuery postMessage plugin (incorrectly assumes lack of postMessage).');
 	} else if(hostname.endsWith('pulse.me')){
 		navigator.userAgent = 'Mozilla/5.0 (Windows NT 5.1; rv:16.0) Gecko/20100101 Firefox/16.0';
 		log('PATCH-1091, pulse.me - work around browser blocking');
@@ -2265,7 +2262,7 @@ function undoFunctionKeypressEventRemoval(){
 			var theGetter=(document.createElement('div').__lookupGetter__('innerHTML'));
 			var lastStr, lastElm;
 			HTMLDivElement.prototype.__defineGetter__('innerHTML', function(){
-				if( this===lastElm && lastStr )return lastStr;
+				if( this===lastElm )return lastStr;
 				return theGetter.apply(this,arguments);
 			});
 			HTMLDivElement.prototype.__defineSetter__('innerHTML', function(str){
@@ -2273,6 +2270,7 @@ function undoFunctionKeypressEventRemoval(){
 					lastElm=this, lastStr=str; 
 					return str;
 				}
+				if( this===lastElm )lastElm = undefined;/* github.com/operasoftware/browserjs/pull/10 */
 				return theSetter.apply(this,arguments);
 			});
 			
