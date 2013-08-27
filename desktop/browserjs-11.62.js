@@ -1,4 +1,4 @@
-// lcS95+x+VVeyCsFZ95DGy1p3dMk+jSRciLR30TKXbF/Px2mE6zW6Hq8AVk/3UrpaiCYw+VQpNnlk8NT3v2Un+X+LY8yOmQV/dy1TPjH1/PdfyI8nLgNOo8WFeao1Juy+SP58iPX7znp1kvtK9M8O2wP8lmi3fs4PD3IuQRRECwn9dQlBzHLVOYaEkZrgVPQzWyzegBdTq4LoSYzbUrYGkXU7dUzh+YWBKXS8SCIasoYPM9HaRRi7fYVWZcsq1O2MzVsu2+o2+Cw6XRlTwwTXHww5xWy3G4i1J625TWgcQvcNVkE/0uD13c3HHRhA5Ne8ZuKH9EnLPw6nxogUqVXacA==
+// Ju7W2TLcu8ewDNkBa0uwIj6a9vNYGPxBFdrOY6WIfj3iuVia84StddTc295kgNkMSrs77FChsSQnGKfNEN6/CJcG9Rb1cfECHbuhkjefe9hUOAHYAGZT7A1mR9L98/uXAXoWcanakB8mVOwzeLcpRm/eqMxj3AFgJdnFNdwijSrnCBxF5ZwVlmlxF+NIDx+U82BR3AvGAgXaEJNDoNxsXK9J35u4LFkUQxvAz5acV9m+FG88mOmuZZhO6n/oWd9XFWUdIiEBCUjzljq2/b5sHH5PfSCKF4J23tFmn0a4CV8hsMMo2VTkVYVGrhHtZBo6JT4Mv5jIMXD4fI2uGQL2rA==
 /**
 ** Copyright (C) 2000-2013 Opera Software ASA.  All rights reserved.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Desktop 11.62 core 2.10.229, August 12, 2013. Active patches: 290 ';
+	var bjsversion=' Opera Desktop 11.62 core 2.10.229, August 27, 2013. Active patches: 290 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -1007,9 +1007,6 @@ function setTinyMCEVersion(e){
 	} else if(hostname.endsWith('pinterest.com')){
 		addCssToDocument('div.NoInput input[data-text-on="On"]{display: inherit !important;visibility: hidden;}');
 		log('PATCH-811, pinterest.com: Opera fails to update status of display:none checkbox');
-	} else if(hostname.endsWith('postdanmark.dk')){
-		addPreprocessHandler(/has_postMessage\s*=\s*window\[postMessage\]\s*&&\s*!\$\.browser\.opera;/, 'has_postMessage = true;',true,function(el){return el.src.indexOf('jquery.ba-postmessage.js')>-1;});
-		log('PATCH-1069, postdanmark.dk - remove sniff in jQuery postMessage plugin (incorrectly assumes lack of postMessage).');
 	} else if(hostname.endsWith('quora.com')){
 		(function(sTo){
 			var lastEvt=new Date();
@@ -1330,6 +1327,10 @@ function setTinyMCEVersion(e){
 		if(hostname.contains('talkgadget.google.')){
 			addCssToDocument('div.hh{height: 85%;}');
 			log('PATCH-1138, G+ type in hangouts (nested 100% tables)');
+		}
+		if(hostname.endsWith('accounts.google.com')){
+			document.hasFocus=function(){return true;}
+			log('PATCH-1152, Google sign-on - fake hasFocus method');
 		}
 		if(hostname.indexOf('adwords.google.') > -1){
 			window.navigator.product = 'Gecko';
@@ -2169,9 +2170,10 @@ function setTinyMCEVersion(e){
 	} else if(hostname.indexOf('tvguide.co.uk')>-1){
 		opera.addEventListener('AfterScript', function(e) {
 			if (e.element.src.indexOf('boxover.js')>-1) {
+				document.removeEventListener('mousemove',moveMouse,false);
 				document.addEventListener('mouseover',moveMouse,false);
 			}
-		}, false);
+		},false);
 		log('PATCH-596, tvguide.co.uk - Fix double descriptions appearing in TV listing');
 	} else if(hostname.indexOf('tvguide.com')>-1){
 		opera.defineMagicVariable('isSafari', function(){return true;}, null);
