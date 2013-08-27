@@ -1,4 +1,4 @@
-// dy6BMO+bp7OMsrgKYZRXBREaYAxEDRo/3n0xtIhvFF2DvdhtQry6DwB3ikdYB5ihWTeFSTaAm77pH0qhLwnXGMn5t9uJZlAVDAXUF8IBYjcrLwX1Svr+aY8FlgddEcFrWiE3JIbRN5LyThGxbqNMKbSBrGYbmFBUbFuM1qEwyR7DxZIjXEH6vqiDhzJHnGwYyBV9p2I07B6QE9ej4tlWXUj3WZY6xllQlzTyIgHDVNFjrSY5CRJZnnnJ5KNyh1rxp6dfJSIvwOwFUUaMsjU8D2Uv417IR0KjbdjG9WTiNG1tk21D5csQ++MjswakiJBovTXBBSuSFklMtmnKTO38mg==
+// XQUpsVPqxuQaVI28PEBpItlQXB/8vlDjpohvoE9/hjzg/OtvsRrX+C2WCAp7v+3JGZ2QFRqGUft6i0EzCe135T7SAbKukNJBs6pQ260j5Fd/UEtNtmNJr8IRrAPWBPI8iNr3awTuO+Z0ou4rj/Uj2KCYLMq6dRZUre946zwuMQ5vRDXln936A+bLV3EvT57qsIKMoa7xn2GI6SGURNKb+9ckJ0AHrOPIjLbtCg31fPhl4A/lDkR+CPc89kU7ILxtzIB2PuLYOKB8hnLy8CewOI7FeINn3n/UkYEbbrnYit5L2bf+WNtobMVZ/b1DtsiD1QNGtGb2fxhRAwW0ZSWF6w==
 /**
 ** Copyright (C) 2000-2013 Opera Software ASA.  All rights reserved.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Desktop 12.01 core 2.10.289, August 12, 2013. Active patches: 325 ';
+	var bjsversion=' Opera Desktop 12.01 core 2.10.289, August 27, 2013. Active patches: 325 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -1139,9 +1139,6 @@ function setTinyMCEVersion(e){
 	} else if(hostname.endsWith('pinterest.com')){
 		addCssToDocument('div.NoInput input[data-text-on="On"]{display: inherit !important;visibility: hidden;}');
 		log('PATCH-811, pinterest.com: Opera fails to update status of display:none checkbox');
-	} else if(hostname.endsWith('postdanmark.dk')){
-		addPreprocessHandler(/has_postMessage\s*=\s*window\[postMessage\]\s*&&\s*!\$\.browser\.opera;/, 'has_postMessage = true;',true,function(el){return el.src.indexOf('jquery.ba-postmessage.js')>-1;});
-		log('PATCH-1069, postdanmark.dk - remove sniff in jQuery postMessage plugin (incorrectly assumes lack of postMessage).');
 	} else if(hostname.endsWith('pulse.me')){
 		navigator.userAgent = 'Mozilla/5.0 (Windows NT 5.1; rv:16.0) Gecko/20100101 Firefox/16.0';
 		log('PATCH-1091, pulse.me - work around browser blocking');
@@ -1497,6 +1494,10 @@ function setTinyMCEVersion(e){
 		if(hostname.contains('talkgadget.google.')){
 			addCssToDocument('div.hh{height: 85%;}');
 			log('PATCH-1138, G+ type in hangouts (nested 100% tables)');
+		}
+		if(hostname.endsWith('accounts.google.com')){
+			document.hasFocus=function(){return true;}
+			log('PATCH-1152, Google sign-on - fake hasFocus method');
 		}
 		if(hostname.indexOf('adwords.google.') > -1){
 			window.navigator.product = 'Gecko';
@@ -2302,9 +2303,10 @@ function setTinyMCEVersion(e){
 	} else if(hostname.indexOf('tvguide.co.uk')>-1){
 		opera.addEventListener('AfterScript', function(e) {
 			if (e.element.src.indexOf('boxover.js')>-1) {
+				document.removeEventListener('mousemove',moveMouse,false);
 				document.addEventListener('mouseover',moveMouse,false);
 			}
-		}, false);
+		},false);
 		log('PATCH-596, tvguide.co.uk - Fix double descriptions appearing in TV listing');
 	} else if(hostname.indexOf('tvguide.com')>-1){
 		opera.defineMagicVariable('isSafari', function(){return true;}, null);
@@ -2325,7 +2327,7 @@ function setTinyMCEVersion(e){
 			var theGetter=(document.createElement('div').__lookupGetter__('innerHTML'));
 			var lastStr, lastElm;
 			HTMLDivElement.prototype.__defineGetter__('innerHTML', function(){
-				if( this===lastElm && lastStr )return lastStr;
+				if( this===lastElm )return lastStr;
 				return theGetter.apply(this,arguments);
 			});
 			HTMLDivElement.prototype.__defineSetter__('innerHTML', function(str){
@@ -2333,6 +2335,7 @@ function setTinyMCEVersion(e){
 					lastElm=this, lastStr=str; 
 					return str;
 				}
+				if( this===lastElm )lastElm = undefined;/* github.com/operasoftware/browserjs/pull/10 */
 				return theSetter.apply(this,arguments);
 			});
 			
