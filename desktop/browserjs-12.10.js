@@ -1,4 +1,4 @@
-// UZ1QOTExYB06y9ErCCxqd4tpU5POA0r5H7fIAyDlnHTwDDQcAtEWN7PlfZYvprs7kKsiuScgQUi022IwLHuM5pkBOZGQ1GNZ4TLfxcLusDmQDAZnyv2XXv9RKtxrucTu0kREFEPiXdWZyV9K+JsjzqL5/OvqhXFiXs5ovfMie5URVR7qxwQZigNy2SZDKIpnHmLNh3nMx6o0NODCWCHTPumZ55JAlNvIksIHUiALQDWIPDyYljkLEucrzwhxCd3Q1U9dT8le8dhvwQDXPN52mNImWDS3KvsZv0zHH4LWMWNzkpNljIG0DxK5fOBlkGdTRyXvqy0QTzE/6rhzxGZc7A==
+// lHOEIX/O6c2SQpYZReSL1q4pNote3Qp6qArQvWYAL618l9W6yTlMHGcVCMFPi6OH4nWoKHdFmDgSHhtsxIocfTUz9IF5l/EDrz1DxwiZOg5apgUEUbo8nBFIBuuykZK2orx13T3jZUAU3UEXh9buvOekPZ5e2epSzLPWRxbYfivrR86OZFTRl53Dmcyg6/YRI4gn1W33mRpDy/19zVGKG3muH0ECIPOm3LB6KtllCQm4JrdgDOE4jYZQ9VATQ0Pu8uRbS52u7l/g0i3g13hCOF21u1m8PPr7h4USadlwznYumrTzj06/F7+T9edwMVOboS/OPlGw9o3pFmIqaemKlg==
 /**
 ** Copyright (C) 2000-2013 Opera Software ASA.  All rights reserved.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Desktop 12.10 core 2.12.388, August 21, 2013. Active patches: 308 ';
+	var bjsversion=' Opera Desktop 12.10 core 2.12.388, August 27, 2013. Active patches: 309 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -1500,6 +1500,10 @@ function undoFunctionKeypressEventRemoval(){
 			addCssToDocument('div.hh{height: 85%;}');
 			log('PATCH-1138, G+ type in hangouts (nested 100% tables)');
 		}
+		if(hostname.endsWith('accounts.google.com')){
+			document.hasFocus=function(){return !document["hidden"];}
+			log('PATCH-1152, Google sign-on - fake hasFocus method');
+		}
 		if(hostname.indexOf('adwords.google.') > -1){
 			window.navigator.product = 'Gecko';
 			log(' PATCH-332, Fix disabled charts on Google AdWords');
@@ -2239,9 +2243,10 @@ function undoFunctionKeypressEventRemoval(){
 	} else if(hostname.indexOf('tvguide.co.uk')>-1){
 		opera.addEventListener('AfterScript', function(e) {
 			if (e.element.src.indexOf('boxover.js')>-1) {
+				document.removeEventListener('mousemove',moveMouse,false);
 				document.addEventListener('mouseover',moveMouse,false);
 			}
-		}, false);
+		},false);
 		log('PATCH-596, tvguide.co.uk - Fix double descriptions appearing in TV listing');
 	} else if(hostname.indexOf('tvguide.com')>-1){
 		opera.defineMagicVariable('isSafari', function(){return true;}, null);
