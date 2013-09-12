@@ -1,4 +1,4 @@
-// CagPAsRqqwNufLdnIMBIogHpq3cbfUIcdkfsq5KBPcQId1KFMXFwwV4a0/JIoP4PYdbB4lePXpjyqG5nPIYKw2r7yUt30Cv0/RMCXRD6H967FT/oBGpeIbcaLV5i2WlSVudZLtTIEehG7aa/CQYjlxcL2azvbg/3NEaCo/NIHYcxS07FtlhlT+Vj15KUxzcUQgRppVgHaPrCCmF0kElGcGtWjU6khI/ZnduZpsiAScbqnn65r3ZD2KMeAnol0enxof0nekWo1xz0K/5jr24Y1dM7XgQQs5p8lDclp1JsjhcqxWDJKkIPssVW/D8xWgPAl2wNbAfmE/BJR69DNieXqQ==
+// b8mT0OpT1mNis3krnEtmVoBqczCz8HpGdjTd9/eIKKGmXJbWLKBAngc8BkW+Qtq7OvK9ra/6t7vqEB8aa8fFcb6WdU48YEmv0WnuDQbJzSKvByOlGUc9WSugHRi89X3OmBFtS1Dhx1z7HSI1kzNT911QpIs3HzB8w8c1wuDNv+zqRXlsHVlxzdP5eXzc2uGynXKIK/OALajEmjKcSNrgh95mlniQjZcqNuJ2ftbfdI9fp5klL+FClAGHi9dJxCP42WHtOvJkV7XQ678TAO8Q38jbulAtot5oMjzQpKoD8NgqSs7PR2E7dWETgXazY0p6D8TLFPpVBNAvL8+NQWsXeA==
 /**
 ** Copyright (C) 2000-2013 Opera Software ASA.  All rights reserved.
 **
@@ -16,7 +16,7 @@
 **/
 // Generic fixes (mostly)
 (function(){
-	var bjsversion=' Opera OPRDesktop 15.0 core 1147.104, September 4, 2013. Active patches: 6 ';
+	var bjsversion=' Opera OPRDesktop 15.0 core 1147.104, September 12, 2013. Active patches: 8 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -38,15 +38,69 @@
 	createTextNode=Document.prototype.createTextNode,
 	insertBefore=Node.prototype.insertBefore,
 	setAttribute=Element.prototype.setAttribute,
-	appendChild=Node.prototype.appendChild;
-	function log(str){if(self==top)console.log('Opera has modified script or content on '+hostname+' ('+str+'). See browser.js for details');}
+	appendChild=Node.prototype.appendChild,
+	setTimeout=window.setTimeout;
+	function log(str){if(self==top && !str.match(/^0,/))console.log('Opera has modified script or content on '+hostname+' ('+str+'). See browser.js for details');}
 
 
 	// Utility functions
 
+	function addCssToDocument2(cssText, doc, mediaType){
+		getElementsByTagName.call=addEventListener.call=createElement.call=createTextNode.call=insertBefore.call=setAttribute.call=appendChild.call=call;
+		doc = doc||document;
+		mediaType = mediaType||'';
+		addCssToDocument2.styleObj=addCssToDocument2.styleObj||{};
+		var styles = addCssToDocument2.styleObj[mediaType];
+		if(!styles){
+			var head = getElementsByTagName.call(doc, "head")[0];
+			if( !head ){
+				var docEl = getElementsByTagName.call(doc, "html")[0];
+				if(!docEl){
+					// :S this shouldn't happen - see if document hasn't loaded
+					addEventListener.call(doc, 'DOMContentLoaded',
+					function(){ addCssToDocument2(cssText, doc); },false);
+					return;
+				}
+				head = createElement.call(doc, "head");
+				if(head) insertBefore.call(docEl, head,docEl.firstChild);
+				else head = docEl;
+			}
+			addCssToDocument2.styleObj[mediaType] = styles = createElement.call(doc, "style");
+			setAttribute.call(styles, "type","text/css");
+			if(mediaType)setAttribute.call(styles, "media", mediaType);
+			appendChild.call(styles, createTextNode.call(doc,' '));
+			appendChild.call(head, styles)
+		}
+		styles.firstChild.nodeValue += cssText+"\n";
+		return true;
+	}
 
 
-	if(hostname.endsWith('www.stanserhorn.ch')){
+
+	if(hostname.endsWith('my.tnt.com')){
+		var _orig_clearPrintBlock;
+		function handleMediaChange(mql) {
+			if (mql.matches) {
+				if(typeof clearPrintBlock == "function"){
+					_orig_clearPrintBlock = clearPrintBlock;
+					clearPrintBlock = function(){}
+				}
+			} else {
+				if(typeof _orig_clearPrintBlock == "function"){
+					setTimeout(_orig_clearPrintBlock, 500);
+				}
+			}
+		}
+		
+		document.addEventListener('DOMContentLoaded', function() {
+			var mpl = window.matchMedia("print");
+			mpl.addListener(handleMediaChange);
+		},false);
+		log('PATCH-1156, my.tnt.com - fix empty printout');
+	} else if(hostname.endsWith('vine.co')){
+		addCssToDocument2('.video-container .overlay{z-index:0 !important}');
+		log('PATCH-1155, vine.co - overlay kills click-to-play video');
+	} else if(hostname.endsWith('www.stanserhorn.ch')){
 		navigator.__defineGetter__('vendor',function(){return 'Google Inc.'});
 		log('OTWK-21, stanserhorn.ch - fix UDM sniffing');
 	} else if(hostname.indexOf('.google.')>-1){
@@ -83,7 +137,7 @@
 				document.getElementById('browserjs_status_message').firstChild.data='Browser.js is enabled! '+bjsversion;
 			}
 		}, false);
-		log('0, Browser.js status and version reported on browser.js documentation page');
+		log('1, Browser.js status and version reported on browser.js documentation page');
 	} else if(href==='https://bugs.opera.com/wizarddesktop/'){
 		document.addEventListener('DOMContentLoaded', function(){
 			var frm;
