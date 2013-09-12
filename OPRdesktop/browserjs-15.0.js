@@ -1,4 +1,4 @@
-// Mh49pTIWPHUNsBNilJ1vN/9HsK3aRWHwFgdsIxXv8Q3UV8SyvMxG1sBtg+AxLIQsNy46Fd5rCUkF/W0jeKeFGs6af+Mv0u6GE5wbbxhGGPZiqSYtVukXgqVORLLX0sjKaZ/+iGON1KiIog0msCmBZtrl/sSEtm+aHo3KxJWIViKRbYPOVdnU6d1F1qQSa0Ao5q0fkCjZpF5PDaNPI2JFEGkT0qXFgHU68J7gtyGM72atHOw2IeivNTVAB2GgWWxV1ycX9PCXV+v8YN1Vmcykm/vyiSu3b9W5YhdDoxMECYe5AVXVDk9nVF9K+aJXodiB693KNnDDV3K/WL77Uw0lkA==
+// CagPAsRqqwNufLdnIMBIogHpq3cbfUIcdkfsq5KBPcQId1KFMXFwwV4a0/JIoP4PYdbB4lePXpjyqG5nPIYKw2r7yUt30Cv0/RMCXRD6H967FT/oBGpeIbcaLV5i2WlSVudZLtTIEehG7aa/CQYjlxcL2azvbg/3NEaCo/NIHYcxS07FtlhlT+Vj15KUxzcUQgRppVgHaPrCCmF0kElGcGtWjU6khI/ZnduZpsiAScbqnn65r3ZD2KMeAnol0enxof0nekWo1xz0K/5jr24Y1dM7XgQQs5p8lDclp1JsjhcqxWDJKkIPssVW/D8xWgPAl2wNbAfmE/BJR69DNieXqQ==
 /**
 ** Copyright (C) 2000-2013 Opera Software ASA.  All rights reserved.
 **
@@ -16,7 +16,7 @@
 **/
 // Generic fixes (mostly)
 (function(){
-	var bjsversion=' Opera OPRDesktop 15.0 core 1147.104, August 12, 2013. Active patches: 5 ';
+	var bjsversion=' Opera OPRDesktop 15.0 core 1147.104, September 4, 2013. Active patches: 6 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -53,6 +53,13 @@
 		/* Google */
 	
 	
+		if(hostname.contains('docs.google.')){
+			document.addEventListener('DOMContentLoaded',function(){
+				var elm = document.querySelector('a[href="http://whatbrowser.org"] + a + a');
+				if(elm){elm.click();}
+			},false);
+			log('PATCH-1032, Google Docs - auto-close unsupported browser message');
+		}
 		if(hostname.contains('translate.google.')){
 			document.addEventListener('DOMContentLoaded',
 				function(){
