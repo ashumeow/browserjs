@@ -1,4 +1,4 @@
-// lHOEIX/O6c2SQpYZReSL1q4pNote3Qp6qArQvWYAL618l9W6yTlMHGcVCMFPi6OH4nWoKHdFmDgSHhtsxIocfTUz9IF5l/EDrz1DxwiZOg5apgUEUbo8nBFIBuuykZK2orx13T3jZUAU3UEXh9buvOekPZ5e2epSzLPWRxbYfivrR86OZFTRl53Dmcyg6/YRI4gn1W33mRpDy/19zVGKG3muH0ECIPOm3LB6KtllCQm4JrdgDOE4jYZQ9VATQ0Pu8uRbS52u7l/g0i3g13hCOF21u1m8PPr7h4USadlwznYumrTzj06/F7+T9edwMVOboS/OPlGw9o3pFmIqaemKlg==
+// CWt/vwvLoJ12AjwENoTrHHMbUfh5qQQ78melf2ZHbmgOf76tOqq5jWA056iUSAaMfwyiLrsDCjNxynPGH2yzFmfb05d3gY6JnK9ja9aJ5twxjPk9orTmhdO5FcBLBdtqJHyqcOQiaBhH4lsVT15rBUIn3l57Mv/MW4+457ezfj7Frj85g7koWnnZ31CFmdVtVhWI0o+D/9f6V5qVFBf+dsCPBoTzxyijY8vvviLaI4OfgmvLCWFwi5OrIjrz+iwjTKgSW3Gjhcy9plY8afknmIYz6WaZcu2exgH7dCB1YRmy+m5BUnhRZ7VqpPzYY8ncanfbYDOUzghiT/kQrKZuxw==
 /**
 ** Copyright (C) 2000-2013 Opera Software ASA.  All rights reserved.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Desktop 12.10 core 2.12.388, August 27, 2013. Active patches: 309 ';
+	var bjsversion=' Opera Desktop 12.10 core 2.12.388, September 12, 2013. Active patches: 306 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -1176,12 +1176,6 @@ function undoFunctionKeypressEventRemoval(){
 		})(setTimeout);
 		
 		log('PATCH-863, Throttle scroll events and certain timeouts to improve Quora performance');
-	} else if(hostname.endsWith('razr.com')){
-		addPreprocessHandler(/b=b\.substring\(c\+4,b\.length\);c=b\.indexOf\("\)"\);/,'b=b.substring(c+5,b.length);c = b.indexOf(\'")\');', true, function(elm){return elm.src&&elm.src.indexOf('main.js')>-1});
-		log('PATCH-876, razr.com: CSS url() argument takes quotes');
-	} else if(hostname.endsWith('razri.com')){
-		addPreprocessHandler(/b=b\.substring\(c\+4,b\.length\);c=b\.indexOf\("\)"\);/,'b=b.substring(c+5,b.length);c = b.indexOf(\'")\');', true, function(elm){return elm.src&&elm.src.indexOf('main.min.js')>-1});
-		log('PATCH-1097, razri.com: CSS url() argument takes quotes');
 	} else if(hostname.endsWith('ruter.no')){
 		fixJQueryAutocomplete();
 		log('PATCH-934, ruter.no: jQuery autocompleter');
@@ -1243,6 +1237,9 @@ function undoFunctionKeypressEventRemoval(){
 	} else if(hostname.endsWith('uye.memurlar.net')){
 		addCssToDocument('table{table-layout:auto;}');
 		log('PATCH-988, uye.memurlar.net: fix table layout');
+	} else if(hostname.endsWith('vine.co')){
+		addCssToDocument('.video-container .overlay{z-index:0 !important}');
+		log('PATCH-1155, vine.co - overlay kills click-to-play video');
 	} else if(hostname.endsWith('washingtonpost.com')){
 		addPreprocessHandler(  /if\(\(b\.webkit\|\|b\.gecko\)&&y\.type==="css"\)/  ,'if((b.webkit||b.gecko||b.opera)&&y.type==="css")' , true, function(el){return el.src.indexOf('yui/yui-min.js')>-1;} );
 	
@@ -1268,6 +1265,13 @@ function undoFunctionKeypressEventRemoval(){
 			}
 		},false);
 		log('PATCH-750, westelm.com - Fix compatibility with old version of MapQuest API');
+	} else if(hostname.endsWith('wikiwatchdog.com')){
+		document.addEventListener('DOMContentLoaded', 
+			function(){
+				document.getElementById('search-form').setAttribute('onsubmit','return false');
+			}
+		,false);
+		log('PATCH-1154, wikiwatchdog.com - prevent default form submit');
 	} else if(hostname.endsWith('www.auf.org')){
 		opera.defineMagicFunction('OldBrowserDetect',function(){return false})
 		log('PATCH-795, auf.org: work around broken sniffer');
@@ -1480,10 +1484,6 @@ function undoFunctionKeypressEventRemoval(){
 			undoFunctionKeypressEventRemoval();
 			log('PATCH-977, Google Documents copy paste\nPATCH-1032, Google Docs - auto-close unsupported browser message\nPATCH-1081, Google Docs - Tab key only works once\nPATCH-382, Google Spreadsheets cell highligh mismatch and key event');
 		}
-		if(hostname.contains('images.google') || pathname.indexOf('/imghp')==0){
-			addCssToDocument('div#logocont + div{margin:auto}');
-			log('PATCH-1034, Google Image search centered');
-		}
 		if(hostname.contains('play.google')){
 			undoFunctionKeypressEventRemoval();
 			log('PATCH-1022, Google Play suggest menu navigation relies on function key keypress events in Opera');
@@ -1642,10 +1642,6 @@ function undoFunctionKeypressEventRemoval(){
 		//terra.cl, terra.com.{ar,br,mx,co,pe}
 		opera.defineMagicVariable('SonoraBrowserDetect', function(obj){ obj.browser='Firefox'; return obj; }, null)
 		log('PATCH-623, Terra music: work around browser sniffing');
-	} else if(hostname.indexOf('.traffic.com')>-1){
-		addPreprocessHandler('(C.Opera)?document.body["client"+B]:document.documentElement["client"+B]', '(C.Opera)?document.documentElement["client"+B]:document.documentElement["client"+B]');
-		
-		log('PATCH-742, Work around browser sniffing that breaks traffic.com');
 	} else if(hostname.indexOf('.tv.com')>-1){
 		opera.addEventListener('BeforeCSS', function(e){
 		  e.cssText = e.cssText.replace(/br{content:"&nbsp;";/g,'br{ ');
@@ -1948,9 +1944,6 @@ function undoFunctionKeypressEventRemoval(){
 	} else if(hostname.indexOf('directv.com')>-1){
 		opera.defineMagicFunction('printContingencyWarningMessage',function(){});
 		log('PATCH-721, directv.com: suppress old browser message');
-	} else if(hostname.indexOf('easycruit.com')>-1){
-		fixIFrameSSIscriptII('resizeIframe');
-		log('PATCH-219, Fujitsu recruitment page on EasyCruit hides content due to browser sniffing');
 	} else if(hostname.indexOf('enter.nifmail.jp') > -1){
 		opera.defineMagicFunction('checkBrowser',function(){
 			return 1;
@@ -2100,7 +2093,7 @@ function undoFunctionKeypressEventRemoval(){
 				document.getElementById('browserjs_status_message').firstChild.data='Browser.js is enabled! '+bjsversion;
 			}
 		}, false);
-		log('0, Browser.js status and version reported on browser.js documentation page');
+		log('1, Browser.js status and version reported on browser.js documentation page');
 	} else if(hostname.indexOf('orbitdownloader.com')>-1){
 		addCssToDocument('div.flag{height:1.1em;}');
 		log('PATCH-322, Force height to avoid overlapping on orbitdownloader');
