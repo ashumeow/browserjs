@@ -1,4 +1,4 @@
-// Ju7W2TLcu8ewDNkBa0uwIj6a9vNYGPxBFdrOY6WIfj3iuVia84StddTc295kgNkMSrs77FChsSQnGKfNEN6/CJcG9Rb1cfECHbuhkjefe9hUOAHYAGZT7A1mR9L98/uXAXoWcanakB8mVOwzeLcpRm/eqMxj3AFgJdnFNdwijSrnCBxF5ZwVlmlxF+NIDx+U82BR3AvGAgXaEJNDoNxsXK9J35u4LFkUQxvAz5acV9m+FG88mOmuZZhO6n/oWd9XFWUdIiEBCUjzljq2/b5sHH5PfSCKF4J23tFmn0a4CV8hsMMo2VTkVYVGrhHtZBo6JT4Mv5jIMXD4fI2uGQL2rA==
+// aU7qgLa0d4CQxKlOW/eM2ST5vqHWQ9olyhdbdE+YYG9Mlb/2XhUH2dFU3PApB3yBx/Jfr0pj/Ypcdiw1ISip8/diJByuyTqsU6PB3IEI30UxuxMo6veiJ7YDqWvR88WPIHNzaZ5I3+2rr93L63cAVuqEMInYHW+ceqwbNXsSeQqeyxS2/D4yS6vT67MbHmRVZh5rUSdc59O3+487QFdQPPnnWGTAS9qjlyqvkrLG6D8uZTItIKBn5Y0ZiAomSCe7MywryT5+X/1OYd9RNpN36GoI9VAdAe9HHq74O32xOGQ6i+65phlyAQj5I+cFuoHuECT5AhcDndZ8a6RjS2QUPg==
 /**
 ** Copyright (C) 2000-2013 Opera Software ASA.  All rights reserved.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Desktop 11.62 core 2.10.229, August 27, 2013. Active patches: 290 ';
+	var bjsversion=' Opera Desktop 11.62 core 2.10.229, October 23, 2013. Active patches: 286 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -691,14 +691,7 @@ function setTinyMCEVersion(e){
 	});
 
 
-	if((hostname.indexOf('tokyo.jp')>-1)||(hostname.indexOf('lg.jp')>-1)){
-		if (location.pathname.indexOf('citymap')>-1) {
-			window.opera.defineMagicFunction('chkBrowser',function(){
-				return true;
-			},false);
-		}
-		log('PATCH-186, tokyo.jp, lg.jp enable maps');
-	} else if(hostname.contains('curriculum.degois.pt')){
+	if(hostname.contains('curriculum.degois.pt')){
 		addPreprocessHandler(/MouseEvent\._eventHandler = function\(\)\s*\{\s*var e = dynapi\.frame\.event;\s*if\(!e\)\s*return true;/g, 'MouseEvent._eventHandler = function(e) {\nif(!e) return true;');
 		log('PATCH-851, Fix event object detection in old DynAPI code');
 	} else if(hostname.contains('onlinetb.tejaratbank.net')){
@@ -724,11 +717,6 @@ function setTinyMCEVersion(e){
 			navigator.userAgent = navigator.userAgent.replace(/OS X (\d+).(\d+).(\d+)+;/,'OS X $1_$2_$3;');
 		}
 		log('PATCH-387, Make Apple Store menu visible\nPATCH-387, Enable menu on Apple support pages\nPATCH-387, Enable menu on Apple community pages\nPATCH-924, apple.com - reformat OS X version string with underscores');
-	} else if(hostname.endsWith('.hp.com')){
-		if(hostname.indexOf('passport2.')>-1){
-		 navigator.appName='Netscape';
-		}
-		log('PATCH-738, Work around sniffing hiding submit buttons on passport2.hp.com');
 	} else if(hostname.endsWith('.multibank.pl')){
 		opera.addEventListener('BeforeEventListener.keypress', function(e){
 			if( e.event.ctrlKey && e.event.keyCode === 3 )e.preventDefault();
@@ -768,6 +756,9 @@ function setTinyMCEVersion(e){
 	} else if(hostname.endsWith('clarkhoward.com')){
 		addCssToDocument('blockquote{content: normal !important;}');
 		log('PATCH-844, clarkhoward.com: abouse of CSS content property');
+	} else if(hostname.endsWith('deploy.com')){
+		window.opera=null;
+		log('PATCH-1158, deploy.com: sniffer');
 	} else if(hostname.endsWith('ebayclassifieds.com') && pathname.match(/\/PostAd/)){
 		navigator.userAgent = navigator.userAgent.replace(/Opera/g,'0pera');
 		log('PATCH-784, eBay Classifieds - disable block on image uploader');
@@ -856,9 +847,6 @@ function setTinyMCEVersion(e){
 			log('PATCH-714, facebook: prevent chat window overflow - Presto bug\nPATCH-488, Facebook: fake paste event to make show preview immediately after pasting links in status\nPATCH-573, Facebook\'s border-radius triggers hyperactive reflow bug, performance suffers\nPATCH-923, facebook: work around lack of pointer-events blocking video playback');
 		}
 		log('0, Facebook');
-	} else if(hostname.endsWith('forcechange.com')){
-		addCssToDocument('div.post{content:normal !important}');
-		log('PATCH-1084, forcechange.com - generated content on real element');
 	} else if(hostname.endsWith('garmin.com')){
 		opera.defineMagicFunction('eligible', function() { return true; });
 		opera.defineMagicFunction('detectOSBrowser', function(realFunc, realThis, inOS, inBrowser) {
@@ -1111,6 +1099,13 @@ function setTinyMCEVersion(e){
 			}
 		},false);
 		log('PATCH-750, westelm.com - Fix compatibility with old version of MapQuest API');
+	} else if(hostname.endsWith('wikiwatchdog.com')){
+		document.addEventListener('DOMContentLoaded', 
+			function(){
+				document.getElementById('search-form').setAttribute('onsubmit','return false');
+			}
+		,false);
+		log('PATCH-1154, wikiwatchdog.com - prevent default form submit');
 	} else if(hostname.endsWith('www.auf.org')){
 		opera.defineMagicFunction('OldBrowserDetect',function(){return false})
 		log('PATCH-795, auf.org: work around broken sniffer');
@@ -1476,10 +1471,6 @@ function setTinyMCEVersion(e){
 		//terra.cl, terra.com.{ar,br,mx,co,pe}
 		opera.defineMagicVariable('SonoraBrowserDetect', function(obj){ obj.browser='Firefox'; return obj; }, null)
 		log('PATCH-623, Terra music: work around browser sniffing');
-	} else if(hostname.indexOf('.traffic.com')>-1){
-		addPreprocessHandler('(C.Opera)?document.body["client"+B]:document.documentElement["client"+B]', '(C.Opera)?document.documentElement["client"+B]:document.documentElement["client"+B]');
-		
-		log('PATCH-742, Work around browser sniffing that breaks traffic.com');
 	} else if(hostname.indexOf('.tv.com')>-1){
 		opera.addEventListener('BeforeCSS', function(e){
 		  e.cssText = e.cssText.replace(/br{content:"&nbsp;";/g,'br{ ');
@@ -1647,7 +1638,11 @@ function setTinyMCEVersion(e){
 		}
 	
 		addCssToDocument('#feed .yt-uix-button-icon-feed-item-action-menu:hover{opacity:0.9}');
-		log('PATCH-478, Fix annotations and advance to next video on YouTube leanback\nPATCH-506, YouTube: avoid Silverlight uploader\nPATCH-1126, YouTube feed option menu does not appear because :hover opacity change, click event doesn\'t bubble correctly');
+	
+		if(hostname.contains('m.youtube.')){
+		addCssToDocument('div._mpab{vertical-align:top !important}');
+		}
+		log('PATCH-478, Fix annotations and advance to next video on YouTube leanback\nPATCH-506, YouTube: avoid Silverlight uploader\nPATCH-1126, YouTube feed option menu does not appear because :hover opacity change, click event doesn\'t bubble correctly\nPATCH-1159, Y!Mobile - align text properly');
 	} else if(hostname.indexOf('aeonretail.jp')>-1){
 		addPreprocessHandler(/var el = win \? \$\.browser\.opera \? document\.body : document\.documentElement : elem;/, 'var el = win ? document.documentElement : elem;', true, function(elm){ return elm.src&&elm.src.indexOf('scroll.js')>-1&&elm.text.indexOf('Opera 9.22')>-1; });
 		log('PATCH-88, Make links work on Aeonretail (outdated jQuery plugin detects Opera and scrolls up)');
@@ -1836,9 +1831,6 @@ function setTinyMCEVersion(e){
 	} else if(hostname.indexOf('directv.com')>-1){
 		opera.defineMagicFunction('printContingencyWarningMessage',function(){});
 		log('PATCH-721, directv.com: suppress old browser message');
-	} else if(hostname.indexOf('easycruit.com')>-1){
-		fixIFrameSSIscriptII('resizeIframe');
-		log('PATCH-219, Fujitsu recruitment page on EasyCruit hides content due to browser sniffing');
 	} else if(hostname.indexOf('enter.nifmail.jp') > -1){
 		opera.defineMagicFunction('checkBrowser',function(){
 			return 1;
@@ -1909,9 +1901,6 @@ function setTinyMCEVersion(e){
 	} else if(hostname.indexOf('internetbank.swedbank.se')>-1){
 		Event.prototype.__defineGetter__('charCode', function(){if( this.keyCode>=48 && this.keyCode<=57  )return this.keyCode;});
 		log('PATCH-611, SwedBank: temporary work around for mismatch between window.event support and charcode support');
-	} else if(hostname.indexOf('journalism.org')>-1){
-		fixIFrameSSIscriptII('resizeIframe');
-		log('PATCH-523, journalism.org: fix old IFrame SSI script');
 	} else if(hostname.indexOf('latenightwithjimmyfallon.com')>-1){
 		window.addEventListener('load', function(){
 			if(window.DPSVPlayer && window.DPSVPlayer.onReady)DPSVPlayer.onReady.call(window);
@@ -1991,7 +1980,7 @@ function setTinyMCEVersion(e){
 				document.getElementById('browserjs_status_message').firstChild.data='Browser.js is enabled! '+bjsversion;
 			}
 		}, false);
-		log('0, Browser.js status and version reported on browser.js documentation page');
+		log('1, Browser.js status and version reported on browser.js documentation page');
 	} else if(hostname.indexOf('orbitdownloader.com')>-1){
 		addCssToDocument('div.flag{height:1.1em;}');
 		log('PATCH-322, Force height to avoid overlapping on orbitdownloader');
@@ -2017,9 +2006,6 @@ function setTinyMCEVersion(e){
 		},false);
 		
 		log('PATCH-202, Show digital pamphlet from Yamada Denki');
-	} else if(hostname.indexOf('play.com')>-1){
-		addCssToDocument('#main-nav li.nav-parent{width: 7.3em}');
-		log('PATCH-468, Make sure Play menu doesn\'t wrap');
 	} else if(hostname.indexOf('pluginfree.com') > -1){
 		opera.defineMagicFunction('sort',function(rf,rt){
 			var res;
