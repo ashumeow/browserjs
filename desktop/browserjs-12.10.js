@@ -1,4 +1,4 @@
-// CWt/vwvLoJ12AjwENoTrHHMbUfh5qQQ78melf2ZHbmgOf76tOqq5jWA056iUSAaMfwyiLrsDCjNxynPGH2yzFmfb05d3gY6JnK9ja9aJ5twxjPk9orTmhdO5FcBLBdtqJHyqcOQiaBhH4lsVT15rBUIn3l57Mv/MW4+457ezfj7Frj85g7koWnnZ31CFmdVtVhWI0o+D/9f6V5qVFBf+dsCPBoTzxyijY8vvviLaI4OfgmvLCWFwi5OrIjrz+iwjTKgSW3Gjhcy9plY8afknmIYz6WaZcu2exgH7dCB1YRmy+m5BUnhRZ7VqpPzYY8ncanfbYDOUzghiT/kQrKZuxw==
+// w/Ps+eauU8qdkqlk4JdRJ1862k+ai4fD8/vJY9HGLXQgchPTdx7Av2qOQsFsyty17cFo8+Tk0tNePzn5wcwBEe75Uac4xVZGkft9Oh6AwX/YDRuaNx63ncY6wzllmO4KHL0/szUW+WcUVpETnqFnhcIXh5UbEVil4TB7n36N8FfLYY5WzEMzJfZdBAU+S5YXw5alrLSrC4yceLi+VRuPiRmXQN0bgNsiOxFJIqLqT0/2LIUMMiDCBLMB85KlQS7JirmduCZiu5/RHMT03IefkRm1iUkmuZm2UDjncTjvSZeTFwCRIUqsRPHoTjWRWa1FsXY0N8rkLnR7bcHcKMosaA==
 /**
 ** Copyright (C) 2000-2013 Opera Software ASA.  All rights reserved.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Desktop 12.10 core 2.12.388, September 12, 2013. Active patches: 306 ';
+	var bjsversion=' Opera Desktop 12.10 core 2.12.388, October 23, 2013. Active patches: 304 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -707,14 +707,7 @@ function undoFunctionKeypressEventRemoval(){
 	});
 
 
-	if((hostname.indexOf('tokyo.jp')>-1)||(hostname.indexOf('lg.jp')>-1)){
-		if (location.pathname.indexOf('citymap')>-1) {
-			window.opera.defineMagicFunction('chkBrowser',function(){
-				return true;
-			},false);
-		}
-		log('PATCH-186, tokyo.jp, lg.jp enable maps');
-	} else if(hostname.contains('curriculum.degois.pt')){
+	if(hostname.contains('curriculum.degois.pt')){
 		addPreprocessHandler(/MouseEvent\._eventHandler = function\(\)\s*\{\s*var e = dynapi\.frame\.event;\s*if\(!e\)\s*return true;/g, 'MouseEvent._eventHandler = function(e) {\nif(!e) return true;');
 		log('PATCH-851, Fix event object detection in old DynAPI code');
 	} else if(hostname.contains('onlinetb.tejaratbank.net')){
@@ -773,11 +766,6 @@ function undoFunctionKeypressEventRemoval(){
 			navigator.userAgent = navigator.userAgent.replace(/OS X (\d+).(\d+).(\d+)+;/,'OS X $1_$2_$3;');
 		}
 		log('PATCH-846, apple.com: don\'t reload from within unload handler\nPATCH-1145, Undo the effects of buggy display: -webkit-box \'support\'\nPATCH-888, apple_core: CSS animations are unprefixed from Opera 12.10\nPATCH-924, apple.com - reformat OS X version string with underscores');
-	} else if(hostname.endsWith('.hp.com')){
-		if(hostname.indexOf('passport2.')>-1){
-		 navigator.appName='Netscape';
-		}
-		log('PATCH-738, Work around sniffing hiding submit buttons on passport2.hp.com');
 	} else if(hostname.endsWith('.jus.br')){
 		opera.addEventListener('BeforeEvent.keypress',function(e){
 			if(e.event.ctrlKey){
@@ -899,6 +887,9 @@ function undoFunctionKeypressEventRemoval(){
 			}
 		},false);
 		log('PATCH-1067, qz.com - make maps draggable despite pointer-events usage');
+	} else if(hostname.endsWith('deploy.com')){
+		window.opera=null;
+		log('PATCH-1158, deploy.com: sniffer');
 	} else if(hostname.endsWith('directbus.com.mx')){
 		if(pathname=="/")location.href='/home.html';
 		log('PATCH-895, directbus.com.mx: avoid freezing Flash frontpage');
@@ -958,9 +949,6 @@ function undoFunctionKeypressEventRemoval(){
 		  }, false);
 		})();
 		log('PATCH-1105, Try to prevent double load events on initially empty IFRAMEs');
-	} else if(hostname.endsWith('forcechange.com')){
-		addCssToDocument('div.post{content:normal !important}');
-		log('PATCH-1084, forcechange.com - generated content on real element');
 	} else if(hostname.endsWith('garmin.com')){
 		opera.defineMagicFunction('eligible', function() { return true; });
 		opera.defineMagicFunction('detectOSBrowser', function(realFunc, realThis, inOS, inBrowser) {
@@ -1791,7 +1779,11 @@ function undoFunctionKeypressEventRemoval(){
 		}
 	
 		addCssToDocument('#feed .yt-uix-button-icon-feed-item-action-menu:hover{opacity:0.9}');
-		log('PATCH-1099, YouTube comments: bad opacity animation performance in Presto\nPATCH-1126, YouTube feed option menu does not appear because :hover opacity change, click event doesn\'t bubble correctly');
+	
+		if(hostname.contains('m.youtube.')){
+		addCssToDocument('div._mpab{vertical-align:top !important}');
+		}
+		log('PATCH-1099, YouTube comments: bad opacity animation performance in Presto\nPATCH-1126, YouTube feed option menu does not appear because :hover opacity change, click event doesn\'t bubble correctly\nPATCH-1159, Y!Mobile - align text properly');
 	} else if(hostname.indexOf('aeonretail.jp')>-1){
 		addPreprocessHandler(/var el = win \? \$\.browser\.opera \? document\.body : document\.documentElement : elem;/, 'var el = win ? document.documentElement : elem;', true, function(elm){ return elm.src&&elm.src.indexOf('scroll.js')>-1&&elm.text.indexOf('Opera 9.22')>-1; });
 		log('PATCH-88, Make links work on Aeonretail (outdated jQuery plugin detects Opera and scrolls up)');
@@ -2006,9 +1998,6 @@ function undoFunctionKeypressEventRemoval(){
 			}
 		}, false);
 		log('PATCH-529, Fix SiteCatalyst H.9 code on Nissan/Infiniti USA');
-	} else if(hostname.indexOf('journalism.org')>-1){
-		fixIFrameSSIscriptII('resizeIframe');
-		log('PATCH-523, journalism.org: fix old IFrame SSI script');
 	} else if(hostname.indexOf('latenightwithjimmyfallon.com')>-1){
 		window.addEventListener('load', function(){
 			if(window.DPSVPlayer && window.DPSVPlayer.onReady)DPSVPlayer.onReady.call(window);
