@@ -1,4 +1,4 @@
-// w/Ps+eauU8qdkqlk4JdRJ1862k+ai4fD8/vJY9HGLXQgchPTdx7Av2qOQsFsyty17cFo8+Tk0tNePzn5wcwBEe75Uac4xVZGkft9Oh6AwX/YDRuaNx63ncY6wzllmO4KHL0/szUW+WcUVpETnqFnhcIXh5UbEVil4TB7n36N8FfLYY5WzEMzJfZdBAU+S5YXw5alrLSrC4yceLi+VRuPiRmXQN0bgNsiOxFJIqLqT0/2LIUMMiDCBLMB85KlQS7JirmduCZiu5/RHMT03IefkRm1iUkmuZm2UDjncTjvSZeTFwCRIUqsRPHoTjWRWa1FsXY0N8rkLnR7bcHcKMosaA==
+// fljGmQIzGIbrl9jfnzbOqxTramRM23tbzHQZyTXzqtP4nF8rtCWlf4rijfZIaPI2+LvC+lPB2cSmrwL3tIwcT7+yYoOHureo6pYvfo92bJPPxIKofwEbCeL0gr9gOa1aYfaaQrhTCzYF4vtr6w0uL15rDV7t/l/hu/AB2WS6NjfhQiBJPXrPhj552YWuu0EgcJD8uZLFODh3JIFxJI8KnyiuvhJE3ld3jGlSg1LD1QGKcASHP0tbDXgWmjeL3yGFuhn5ZKIkAL2NusX0kmMEWXlGX5qBMX9rMHRKoasK/jVsoFcTGVpelMYz0bKrmTuhx6XMvM0q2fPQcsOy3qF7Ow==
 /**
 ** Copyright (C) 2000-2013 Opera Software ASA.  All rights reserved.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Desktop 12.10 core 2.12.388, October 23, 2013. Active patches: 304 ';
+	var bjsversion=' Opera Desktop 12.10 core 2.12.388, November 29, 2013. Active patches: 302 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -890,9 +890,6 @@ function undoFunctionKeypressEventRemoval(){
 	} else if(hostname.endsWith('deploy.com')){
 		window.opera=null;
 		log('PATCH-1158, deploy.com: sniffer');
-	} else if(hostname.endsWith('directbus.com.mx')){
-		if(pathname=="/")location.href='/home.html';
-		log('PATCH-895, directbus.com.mx: avoid freezing Flash frontpage');
 	} else if(hostname.endsWith('ebayclassifieds.com') && pathname.match(/\/PostAd/)){
 		navigator.userAgent = navigator.userAgent.replace(/Opera/g,'0pera');
 		log('PATCH-784, eBay Classifieds - disable block on image uploader');
@@ -1222,12 +1219,6 @@ function undoFunctionKeypressEventRemoval(){
 		opera.defineMagicVariable('is_opera',function(){return false},null);
 		opera.defineMagicVariable('is_nav6up',function(){return true},null);
 		log('PATCH-1076, usbank.com - avoid unsupported browser alert');
-	} else if(hostname.endsWith('uye.memurlar.net')){
-		addCssToDocument('table{table-layout:auto;}');
-		log('PATCH-988, uye.memurlar.net: fix table layout');
-	} else if(hostname.endsWith('vine.co')){
-		addCssToDocument('.video-container .overlay{z-index:0 !important}');
-		log('PATCH-1155, vine.co - overlay kills click-to-play video');
 	} else if(hostname.endsWith('washingtonpost.com')){
 		addPreprocessHandler(  /if\(\(b\.webkit\|\|b\.gecko\)&&y\.type==="css"\)/  ,'if((b.webkit||b.gecko||b.opera)&&y.type==="css")' , true, function(el){return el.src.indexOf('yui/yui-min.js')>-1;} );
 	
@@ -1470,7 +1461,13 @@ function undoFunctionKeypressEventRemoval(){
 			},false);
 		
 			undoFunctionKeypressEventRemoval();
-			log('PATCH-977, Google Documents copy paste\nPATCH-1032, Google Docs - auto-close unsupported browser message\nPATCH-1081, Google Docs - Tab key only works once\nPATCH-382, Google Spreadsheets cell highligh mismatch and key event');
+		
+			if(pathname.indexOf('/spreadsheet/')==0){
+				if(!location.search.match(/richtext/)){
+					location.search+='&richtext=true';
+				}
+			}
+			log('PATCH-977, Google Documents copy paste\nPATCH-1032, Google Docs - auto-close unsupported browser message\nPATCH-1081, Google Docs - Tab key only works once\nPATCH-382, Google Spreadsheets cell highligh mismatch and key event\nPATCH-1162, Google Spreadsheets sniffing prevents editing');
 		}
 		if(hostname.contains('play.google')){
 			undoFunctionKeypressEventRemoval();
