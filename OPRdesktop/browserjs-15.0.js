@@ -1,4 +1,4 @@
-// trn1nD06HfeyPirj0ZJFS8WNC7Jgg9xdAJ/wK2PEFL2AEnk9mWoQJd1KCQqTt0A5OnUiBKiPnWAz2nvOsvLALQW8cgKOvj7SO4409JFBDdLTMNmw7OFWJCqOdumcxpM2rH1MHzH5FjUj1lANwlegzgzDSNsL8jKzidBPf2Nfv6mOE86A1YsRaqCnUQLyVTAarFaeE3WJvPPzoEuz+Bg+HvQ7ZON1zUYQ3ZSBy6zW5gBlPv+wrqULjovDQx9sJdjRrEHQQ3HzMtvDBoqr+hix9dVGe6A6OK2io1+R19IBPgoK64d7cAuLnpHBS/W2/I+ctYIVC+xMsGAF21Htzo+7tA==
+// HGa9XU6nFVsgdq3VNPQ/XlBx2FXch5nYsiR/o5ZvakIjblgEK+4RSyF/Mm+lkS0nyUra3en8yMLY2tLljxKLeXiTMjvDNz3K7OaZ/94JVTQkx4r8WrcYcQCFJmeS4emDaMVXBvNT2M9vRf2ZSj+B287h7zRkpeoS9ps3ECokYXMap2fADueJB7Fy7sGGu4yT/QAHBUIMq2Evn9/p8ZxEPxfy/j271N0o+QK+RXp2AvBtx/ftQcYc0ckxjb1IOABxl+M8NDYhs8iaaBk6GsAN5Xz/Ja8BgOMMlkF99zQAFO6eU8/7c13M4+/kUyums/muD2V0vnlN5m8jnZ3dYNUJ2A==
 /**
 ** Copyright (C) 2000-2013 Opera Software ASA.  All rights reserved.
 **
@@ -16,7 +16,7 @@
 **/
 // Generic fixes (mostly)
 (function(){
-	var bjsversion=' Opera OPRDesktop 15.0 core 1147.104, November 22, 2013. Active patches: 9 ';
+	var bjsversion=' Opera OPRDesktop 15.0 core 1162.104, December 12, 2013. Active patches: 10 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -45,6 +45,29 @@
 
 	// Utility functions
 
+	function addCssToDocument2(cssText, doc, mediaType){
+		getElementsByTagName.call=addEventListener.call=createElement.call=createTextNode.call=setAttribute.call=appendChild.call=call;
+		doc = doc||document;
+		mediaType = mediaType||'';
+		addCssToDocument2.styleObj=addCssToDocument2.styleObj||{};
+		var styles = addCssToDocument2.styleObj[mediaType];
+		if(!styles){
+			var head = getElementsByTagName.call(doc, "head")[0];
+			if( !head ){//head always present in html5-parsers, assume document not ready
+				addEventListener.call(doc, 'DOMContentLoaded',
+					function(){ addCssToDocument2(cssText, doc, mediaType); },false);
+				return;
+			}
+			addCssToDocument2.styleObj[mediaType] = styles = createElement.call(doc, "style");
+			setAttribute.call(styles, "type","text/css");
+			if(mediaType)setAttribute.call(styles, "media", mediaType);
+			appendChild.call(styles, createTextNode.call(doc,' '));
+			appendChild.call(head, styles)
+		}
+		styles.firstChild.nodeValue += cssText+"\n";
+		return true;
+	}
+
 
 
 	if(hostname.endsWith('my.tnt.com')){
@@ -68,7 +91,7 @@
 		},false);
 		log('PATCH-1156, my.tnt.com - fix empty printout');
 	} else if(hostname.endsWith('www.stanserhorn.ch')){
-		navigator.__defineGetter__('vendor',function(){return 'Google Inc.'});
+		Object.defineProperty(navigator, 'vendor', { get: function(){ return 'Google Inc.' } });
 		log('OTWK-21, stanserhorn.ch - fix UDM sniffing');
 	} else if(hostname.indexOf('.google.')>-1){
 		/* Google */
@@ -80,6 +103,10 @@
 				if(elm){elm.click();}
 			},false);
 			log('PATCH-1032, Google Docs - auto-close unsupported browser message');
+		}
+		if(hostname.contains('mail.google.')){
+			addCssToDocument2('div.n6 {display: block !important} table.cf.hX{display:inline-table}');//"more", labels
+			log('PATCH-1163, No "More" button in Gmail and misaligned labels');
 		}
 		if(hostname.contains('translate.google.')){
 			document.addEventListener('DOMContentLoaded',
