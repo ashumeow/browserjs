@@ -1,6 +1,6 @@
-// fljGmQIzGIbrl9jfnzbOqxTramRM23tbzHQZyTXzqtP4nF8rtCWlf4rijfZIaPI2+LvC+lPB2cSmrwL3tIwcT7+yYoOHureo6pYvfo92bJPPxIKofwEbCeL0gr9gOa1aYfaaQrhTCzYF4vtr6w0uL15rDV7t/l/hu/AB2WS6NjfhQiBJPXrPhj552YWuu0EgcJD8uZLFODh3JIFxJI8KnyiuvhJE3ld3jGlSg1LD1QGKcASHP0tbDXgWmjeL3yGFuhn5ZKIkAL2NusX0kmMEWXlGX5qBMX9rMHRKoasK/jVsoFcTGVpelMYz0bKrmTuhx6XMvM0q2fPQcsOy3qF7Ow==
+// t6r+C5aKatoUhZaCk+GdN5BR6+JoeIzgpjXxGuekzOV6AZho96uIfQ7AP732Twhvr7MLtPnckb7aINAZb2O6c+v9lTjAn256FwGuy/F2TF6y1tl1rI9zHvqm3x8zshkSaymaIg2steU81A6gErBVXvxay1/u1abzpJ/ZulWkzr3gERMgR7fm4maK0cWE2y6LWSReZWOJoVmUdRIgTgTDOIcMTw4Zf4qCVMwoEHE8sv6gdpIjI9jENLvfGbSnqp+w1qbtO8SuaWknG4S0Rzq3Oz+2tj8F0v2J4EuEqLvQTJqOBz27Foh44vGIDHYwFPut/5uM1152Ys69tuOP74kOmg==
 /**
-** Copyright (C) 2000-2013 Opera Software ASA.  All rights reserved.
+** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
 ** This file is part of the Opera web browser.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Desktop 12.10 core 2.12.388, November 29, 2013. Active patches: 302 ';
+	var bjsversion=' Opera Desktop 12.10 core 2.12.388, January 21, 2014. Active patches: 293 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -887,9 +887,6 @@ function undoFunctionKeypressEventRemoval(){
 			}
 		},false);
 		log('PATCH-1067, qz.com - make maps draggable despite pointer-events usage');
-	} else if(hostname.endsWith('deploy.com')){
-		window.opera=null;
-		log('PATCH-1158, deploy.com: sniffer');
 	} else if(hostname.endsWith('ebayclassifieds.com') && pathname.match(/\/PostAd/)){
 		navigator.userAgent = navigator.userAgent.replace(/Opera/g,'0pera');
 		log('PATCH-784, eBay Classifieds - disable block on image uploader');
@@ -992,9 +989,6 @@ function undoFunctionKeypressEventRemoval(){
 	} else if(hostname.endsWith('imf-wb.2012tokyo.mof.go.jp')){
 		addCssToDocument('#TopPage .category-section li{float:left;}#HeaderRight{float:right;}');
 		log('PATCH-910, 2012tokyo: avoid inline-block wrapping');
-	} else if(hostname.endsWith('ingdirect.com')){
-		addCssToDocument('div.alert.caution{display:none}');
-		log('PATCH-902, ingdirect.com: avoid browser blocking');
 	} else if(hostname.endsWith('insubuy.com')){
 		HTMLElement.prototype.onselectstart = true;
 		log('PATCH-703, insubuy.com: don\'t prevent mouse click');
@@ -1228,22 +1222,6 @@ function undoFunctionKeypressEventRemoval(){
 		opera.defineMagicVariable('goodBrowser',function(){return true},null);
 		
 		log('PATCH-633, No load fires for LINK element if href returns an empty file with text/javascript type - breaks Washingtonpost.com slideshows\nPATCH-494, Washingtonpost: avoid articles being overwritten in race condition\nPATCH-832, Report that Opera is a good browser on The Washington Post');
-	} else if(hostname.endsWith('westelm.com')){
-		opera.addEventListener('BeforeExternalScript',function(ev){
-			var name=ev.element.src; 
-			if(!name){return;}
-			if(name.indexOf('mqcommon.js')>-1){
-				window.navigator.appName="Netscape";
-			}
-			if(name.indexOf('mqutils.js')>-1){
-				opera.defineMagicFunction('mqXmlToStr', function(oRealFunc, oThis, xmlDoc) {
-					if(xmlDoc == null)return "";
-					var serializer = new window.XMLSerializer();
-					return serializer.serializeToString(xmlDoc).replace('<?xml version="1.0"?>','');
-				});
-			}
-		},false);
-		log('PATCH-750, westelm.com - Fix compatibility with old version of MapQuest API');
 	} else if(hostname.endsWith('wikiwatchdog.com')){
 		document.addEventListener('DOMContentLoaded', 
 			function(){
@@ -1254,15 +1232,6 @@ function undoFunctionKeypressEventRemoval(){
 	} else if(hostname.endsWith('www.auf.org')){
 		opera.defineMagicFunction('OldBrowserDetect',function(){return false})
 		log('PATCH-795, auf.org: work around broken sniffer');
-	} else if(hostname.endsWith('www.bankofamerica.com')){
-		if(pathname.indexOf('/activate')==0){
-		opera.addEventListener('BeforeCSS', function(e) {
-			if (e.element.href && e.element.href.indexOf('cardactivation-ie.css')>-1) {
-				e.element.href = e.element.href.replace(/cardactivation-ie.css/, 'cardactivation-moz.css')
-			}
-		}, false);
-		}
-		log('PATCH-875, bankofamerica: don\'t use IE stylesheet');
 	} else if(hostname.endsWith('www.downg.com')){
 		addCssToDocument('.softwaretable .inner{font-size:10px}');
 		log('PATCH-1007, downg.com - decrease font-size to avoid wrapping');
@@ -1293,9 +1262,6 @@ function undoFunctionKeypressEventRemoval(){
 	} else if(hostname.endsWith('www.myntra.com')){
 		addCssToDocument('div.mk-category-page{width:980px}');
 		log('PATCH-1089, myntra.com - content wraps');
-	} else if(hostname.endsWith('www.nfl.com')){
-		addPreprocessHandler( /if\(style&&style\['display'\]==='none'\)\{ret=true;\}/ , '');
-		log('PATCH-936, nfl.com: avoid hundreds of reflows');
 	} else if(hostname.endsWith('www.state.gov')){
 		opera.addEventListener('BeforeScript',function(e){
 			if(e.element.src.indexOf('sifr-config.js')>-1){e.preventDefault();}
@@ -1887,9 +1853,6 @@ function undoFunctionKeypressEventRemoval(){
 	} else if(hostname.indexOf('cdec-sic.cl')!=-1){
 		fixHierMenus();
 		log('365516, Old HierMenus on cdec-sic.cl');
-	} else if(hostname.indexOf('cnnturk.com')>-1){
-		addCssToDocument('#fbtm div.dtc{bottom:-170px !important;}#fbtm div.dtc ul{position: static !important; display:inline !important}');
-		log('PATCH-509, cnnturk: work around CSS bug that causes footer content to float upwards');
 	} else if(hostname.indexOf('computerra.ru')>-1){
 		document.addEventListener('DOMContentLoaded', function(){
 			if(window.jsUtils&&window.jsUtils.bOpera)jsUtils.bOpera=false;
@@ -1946,9 +1909,6 @@ function undoFunctionKeypressEventRemoval(){
 			addCssToDocument('html{background:#fff}');
 		}
 		log('PATCH-617, missing QuickView background color on Forever21.co.jp');
-	} else if(hostname.indexOf('frys.com')>-1){
-		addPreprocessHandler('self.parent.location=document.location;','if(self!=top)self.parent.location=document.location;');
-		log('PATCH-638, frys.com: avoid racy framebuster due to lack of script async');
 	} else if(hostname.indexOf('geforce.com')>-1&&pathname.toLowerCase().indexOf('/drivers')>-1){
 		addCssToDocument('div.main,div.mainContent,div.rightNav,div.middle,div.contentMiddle,div.innerBox,div.innerMiddle{position:static !important;}');
 		
@@ -2080,9 +2040,6 @@ function undoFunctionKeypressEventRemoval(){
 			}
 		}, false);
 		log('1, Browser.js status and version reported on browser.js documentation page');
-	} else if(hostname.indexOf('orbitdownloader.com')>-1){
-		addCssToDocument('div.flag{height:1.1em;}');
-		log('PATCH-322, Force height to avoid overlapping on orbitdownloader');
 	} else if(hostname.indexOf('ordering.bellsouth.com')!=-1){
 		opera.defineMagicVariable( 'isDHTML', function(){return true;}, null );
 		opera.defineMagicFunction('checkBrowser', function(){});
@@ -2184,9 +2141,6 @@ function undoFunctionKeypressEventRemoval(){
 	} else if(hostname.indexOf('support.asus.com.tw')>-1){
 		navigator.appName='Netscape';
 		log('PATCH-459, Prevent Asus browser sniffing from breaking support site software download');
-	} else if(hostname.indexOf('suzuki.co.jp')>-1){
-		opera.defineMagicFunction('browserCheck',function(){return true});
-		log('PATCH-716, Suzuki Japan - fix 3D car browser functionality');
 	} else if(hostname.indexOf('t.qq.com')>-1){
 		opera.addEventListener('BeforeScript', function(e){
 			if(e.element.src && e.element.src.indexOf('mi.Tmpl')>-1 && typeof _ === 'function'){
