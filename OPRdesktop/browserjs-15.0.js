@@ -1,6 +1,6 @@
-// HGa9XU6nFVsgdq3VNPQ/XlBx2FXch5nYsiR/o5ZvakIjblgEK+4RSyF/Mm+lkS0nyUra3en8yMLY2tLljxKLeXiTMjvDNz3K7OaZ/94JVTQkx4r8WrcYcQCFJmeS4emDaMVXBvNT2M9vRf2ZSj+B287h7zRkpeoS9ps3ECokYXMap2fADueJB7Fy7sGGu4yT/QAHBUIMq2Evn9/p8ZxEPxfy/j271N0o+QK+RXp2AvBtx/ftQcYc0ckxjb1IOABxl+M8NDYhs8iaaBk6GsAN5Xz/Ja8BgOMMlkF99zQAFO6eU8/7c13M4+/kUyums/muD2V0vnlN5m8jnZ3dYNUJ2A==
+// VjkmOH2svxRfQEc5bYMKUnNHJ1fKmaqXAPQSpzqoFQ14PSMfI0vDDdbAr31oHqwIObkX+uJEYIQefWU8DpjvgxTs0yW0nKxBQmY8BEKv1VpkzBL3/+cMjf185c9mCV3b4hjlT1DqzRGtT+SeHBovi3CdDfR2bon/Z0fS7K4NbCaV82VcNHQSPBaLUXn+Twg4rDy1gYVvPo1/7WpDVHNg0PsnZOQ5n+p7GFiGo+tpHipwDGhz6AWbRNqZx40hOFTVB+9EcxM3f5tGvhVVmQw+w0ps61BL+Qf1QdEZ6GucKnoA06Wff8A2y9e9Pr370svt1n4gdEE8U934wZR+PfNrrw==
 /**
-** Copyright (C) 2000-2013 Opera Software ASA.  All rights reserved.
+** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
 ** This file is part of the Opera web browser.
 **
@@ -16,7 +16,7 @@
 **/
 // Generic fixes (mostly)
 (function(){
-	var bjsversion=' Opera OPRDesktop 15.0 core 1162.104, December 12, 2013. Active patches: 10 ';
+	var bjsversion=' Opera OPRDesktop 15.0 core 1147.104, January 21, 2014. Active patches: 14 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -70,7 +70,10 @@
 
 
 
-	if(hostname.endsWith('my.tnt.com')){
+	if(hostname.endsWith('lingualeo.ru')){
+		addCssToDocument2('div.body-bg-top, div.body-bg-bot {-webkit-transform: none}')
+		log('PATCH-1171, lingualeo.ru - show embedded videos from ted.com');
+	} else if(hostname.endsWith('my.tnt.com')){
 		var _orig_clearPrintBlock;
 		function handleMediaChange(mql) {
 			if (mql.matches) {
@@ -90,6 +93,22 @@
 			mpl.addListener(handleMediaChange);
 		},false);
 		log('PATCH-1156, my.tnt.com - fix empty printout');
+	} else if(hostname.endsWith('vimeo.com')){
+		var isPatched = false;
+		function patch(){
+			document.body.addEventListener('click',function(){
+				if(isPatched)return
+				if(document.querySelector('object') && document.querySelector('object').SetVariable === undefined ){
+					addCssToDocument2('div.target{display:none !important;}');
+					document.querySelector('div.player').addEventListener('mousedown',function(e){
+						e.stopPropagation();
+					},true);
+				}
+				isPatched = true;
+			},false);
+		}
+		window.addEventListener('load',patch,false);
+		log('PATCH-1166, vimeo.com - make click-to-play and turbo mode work');
 	} else if(hostname.endsWith('www.stanserhorn.ch')){
 		Object.defineProperty(navigator, 'vendor', { get: function(){ return 'Google Inc.' } });
 		log('OTWK-21, stanserhorn.ch - fix UDM sniffing');
@@ -108,6 +127,13 @@
 			addCssToDocument2('div.n6 {display: block !important} table.cf.hX{display:inline-table}');//"more", labels
 			log('PATCH-1163, No "More" button in Gmail and misaligned labels');
 		}
+		if(hostname.contains('otvety.google.')){
+			document.addEventListener('DOMContentLoaded', function() {
+				var elm = document.querySelector('div.unspbr');
+				if (elm) { elm.remove(); }
+			});
+			log('PATCH-1168, otvety.google.ru - remove "unsupported browser" banner');
+		}
 		if(hostname.contains('translate.google.')){
 			document.addEventListener('DOMContentLoaded',
 				function(){
@@ -124,6 +150,11 @@
 	} else if(hostname.indexOf('.yahoo.')>-1){
 		/* Yahoo! */
 		log('0, Yahoo!');
+	} else if(hostname.indexOf('.youtube.com')>-1){
+		if( navigator.mimeTypes['application/x-shockwave-flash'] && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin ){
+		 HTMLMediaElement.prototype.canPlayType = function(){return ''}
+		}
+		log('PATCH-1164, YouTube force Flash player for HTML5 content');
 	} else if(hostname.indexOf('opera.com')>-1&& pathname.indexOf('/docs/browserjs/')==0){
 		document.addEventListener('DOMContentLoaded',function(){
 			if(document.getElementById('browserjs_active')){
