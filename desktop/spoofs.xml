@@ -60,11 +60,6 @@
 		<pref name="Spoof UserAgent ID" value="2"/>
 	</section>
 </host>
-<host name="trkcnfrm1.smi.usps.com">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="1"/>
-	</section>
-</host>
 <host name="rikai.com">
 	<section name="User Agent">
 		<pref name="Spoof UserAgent ID" value="2"/>
@@ -103,9 +98,9 @@
 		<pref name="CompatMode Override" value="2"/>
 	</section>
 </host>
-<host name="booking.aul.gl">
+<host name="belfius.be">
 	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="5"/>
+		<pref name="Spoof UserAgent ID" value="4"/>
 	</section>
 </host>
 <host name="www.ing.nl">
@@ -116,11 +111,6 @@
 <host name="netflix.com">
 	<section name="User Agent">
 		<pref name="Spoof UserAgent ID" value="4"/>
-	</section>
-</host>
-<host name="sss-web.usps.com">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="1"/>
 	</section>
 </host>
 <host name="peoplefirst.myflorida.com">
@@ -253,11 +243,6 @@
 		<pref name="Spoof UserAgent ID" value="2"/>
 	</section>
 </host>
-<host name="ib.surugabank.co.jp">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="1"/>
-	</section>
-</host>
 <host name="mib.miyagin.co.jp">
 	<section name="User Agent">
 		<pref name="Spoof UserAgent ID" value="2"/>
@@ -266,11 +251,6 @@
 <host name="musashinobank.ib.cyber-biz.ne.jp">
 	<section name="User Agent">
 		<pref name="Spoof UserAgent ID" value="2"/>
-	</section>
-</host>
-<host name="shinwabank.ib.cyber-biz.ne.jp">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="1"/>
 	</section>
 </host>
 <host name="ynb.yamagatabank.co.jp">
@@ -311,16 +291,6 @@
 <host name="busnavi.net">
 	<section name="User Agent">
 		<pref name="Spoof UserAgent ID" value="2"/>
-	</section>
-</host>
-<host name="elanit.ch">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="1"/>
-	</section>
-</host>
-<host name="elanit.co.uk">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="1"/>
 	</section>
 </host>
 <host name="directline.com">
@@ -469,27 +439,7 @@
 		<pref name="Spoof UserAgent ID" value="2"/>
 	</section>
 </host>
-<host name="flyasiana.com">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="2"/>
-	</section>
-</host>
-<host name="ccb.com.cn">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="2"/>
-	</section>
-</host>
 <host name="locator.chase.com">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="2"/>
-	</section>
-</host>
-<host name="lake.co.jp">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="2"/>
-	</section>
-</host>
-<host name="shinseifinancial.co.jp">
 	<section name="User Agent">
 		<pref name="Spoof UserAgent ID" value="2"/>
 	</section>
@@ -509,9 +459,9 @@
 		<pref name="Spoof UserAgent ID" value="2"/>
 	</section>
 </host>
-<host name="ncbank.co.jp">
+<host name="groups.google.com">
 	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="2"/>
+		<pref name="Spoof UserAgent ID" value="4"/>
 	</section>
 </host>
 <host name="higobank.co.jp">
@@ -594,11 +544,6 @@
 		<pref name="Spoof UserAgent ID" value="2"/>
 	</section>
 </host>
-<host name="coupons.com">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="2"/>
-	</section>
-</host>
 <host name="finansbank.com.tr">
 	<section name="User Agent">
 		<pref name="Spoof UserAgent ID" value="4"/>
@@ -626,11 +571,6 @@
 	</section>
 </host>
 <host name="timewarnercable.com">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="2"/>
-	</section>
-</host>
-<host name="bioplanet.be">
 	<section name="User Agent">
 		<pref name="Spoof UserAgent ID" value="2"/>
 	</section>
@@ -673,11 +613,6 @@
 	</section>
 	<section name="Performance">
 		<pref name="Enable Pipelining" value="0"/>
-	</section>
-</host>
-<host name="secure.ally.ca">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="2"/>
 	</section>
 </host>
 <host name="secure.ally.com">
@@ -770,11 +705,6 @@
 		<pref name="Spoof UserAgent ID" value="2"/>
 	</section>
 </host>
-<host name="help.sap.com">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="1"/>
-	</section>
-</host>
 <host name="central-tanshifx.com">
 	<section name="User Agent">
 		<pref name="Spoof UserAgent ID" value="2"/>
@@ -796,16 +726,6 @@
 	</section>
 </host>
 <host name="ubank.com.au">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="4"/>
-	</section>
-</host>
-<host name="new.myspace.com">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="1"/>
-	</section>
-</host>
-<host name="airgreenland.com">
 	<section name="User Agent">
 		<pref name="Spoof UserAgent ID" value="4"/>
 	</section>
@@ -885,19 +805,14 @@
 		<pref name="Spoof UserAgent ID" value="2"/>
 	</section>
 </host>
-<host name="ingdirect.com">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="4"/>
-	</section>
-</host>
 <host name="mindbloom.com">
 	<section name="User Agent">
 		<pref name="Spoof UserAgent ID" value="4"/>
 	</section>
 </host>
-<host name="zynga.com">
+<host name="wd2-portal.usps.gov">
 	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="4"/>
+		<pref name="Spoof UserAgent ID" value="3"/>
 	</section>
 </host>
 <host name="tickets.disney.go.com">
@@ -921,11 +836,6 @@
 	</section>
 	<section name="Performance">
 		<pref name="Enable Pipelining" value="0"/>
-	</section>
-</host>
-<host name="elmu.hu">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="4"/>
 	</section>
 </host>
 <host name="safesquid.com">
@@ -963,27 +873,7 @@
 		<pref name="Spoof UserAgent ID" value="4"/>
 	</section>
 </host>
-<host name="service.gmx.net">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="4"/>
-	</section>
-</host>
-<host name="gmxattachments.net">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="4"/>
-	</section>
-</host>
 <host name="hbogo.com">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="4"/>
-	</section>
-</host>
-<host name="foreland-fx.com">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="4"/>
-	</section>
-</host>
-<host name="foreland.co.jp">
 	<section name="User Agent">
 		<pref name="Spoof UserAgent ID" value="4"/>
 	</section>
@@ -998,14 +888,9 @@
 		<pref name="Spoof UserAgent ID" value="4"/>
 	</section>
 </host>
-<host name="guardianretirement.com">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="2"/>
-	</section>
-</host>
 <host name="mobile.free.fr">
 	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="0"/>
+		<pref name="Spoof UserAgent ID" value="1"/>
 	</section>
 	<section name="Performance">
 		<pref name="Enable Pipelining" value="0"/>
@@ -1026,19 +911,9 @@
 		<pref name="Spoof UserAgent ID" value="4"/>
 	</section>
 </host>
-<host name="fashionism.ca">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="2"/>
-	</section>
-</host>
 <host name="rankers.co.nz">
 	<section name="User Agent">
 		<pref name="Spoof UserAgent ID" value="4"/>
-	</section>
-</host>
-<host name="meo.pt">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="1"/>
 	</section>
 </host>
 <host name="documentation.basis.com">
@@ -1085,11 +960,6 @@
 	</section>
 </host>
 <host name="services3.posten.se">
-	<section name="User Agent">
-		<pref name="Spoof UserAgent ID" value="4"/>
-	</section>
-</host>
-<host name="contactus.samsung.com">
 	<section name="User Agent">
 		<pref name="Spoof UserAgent ID" value="4"/>
 	</section>
