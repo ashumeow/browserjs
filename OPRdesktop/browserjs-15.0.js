@@ -1,4 +1,4 @@
-// VjkmOH2svxRfQEc5bYMKUnNHJ1fKmaqXAPQSpzqoFQ14PSMfI0vDDdbAr31oHqwIObkX+uJEYIQefWU8DpjvgxTs0yW0nKxBQmY8BEKv1VpkzBL3/+cMjf185c9mCV3b4hjlT1DqzRGtT+SeHBovi3CdDfR2bon/Z0fS7K4NbCaV82VcNHQSPBaLUXn+Twg4rDy1gYVvPo1/7WpDVHNg0PsnZOQ5n+p7GFiGo+tpHipwDGhz6AWbRNqZx40hOFTVB+9EcxM3f5tGvhVVmQw+w0ps61BL+Qf1QdEZ6GucKnoA06Wff8A2y9e9Pr370svt1n4gdEE8U934wZR+PfNrrw==
+// a4K0f4ZmQmxKP0aXxhGEGHALuRGVUxEQDdW1q8PwiZtVQpyqjc6Q/gmTnD6kQnbVoOSQcQ7tHavDBclk4GH24gdC3XFxTwnvZrwGV0SuWMkulNF67Y92a13U3gn21v9MyxUZbntYgUgCi7XJo0uWWKx/IKT6plGdO31H5nHPjTk2+5sqNgnMcK+XC+g7Tjtd/guP1z8WOarzIWqH2SJX9pQbkOUH7H8ejv1YUin3du3E2nOR7c2c9EZJj0wT6klCXWCr4yYBy7CznmQuIeR+LrP8EX+tzb/XcOurm3kW6Ce4wsxyXDzGL4RWQqqv1O0zpuikhJilOkU74Wt2S0SoYw==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -16,7 +16,7 @@
 **/
 // Generic fixes (mostly)
 (function(){
-	var bjsversion=' Opera OPRDesktop 15.0 core 1147.104, January 21, 2014. Active patches: 14 ';
+	var bjsversion=' Opera OPRDesktop 15.00 core 1326.63, February 7, 2014. Active patches: 15 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -70,7 +70,17 @@
 
 
 
-	if(hostname.endsWith('lingualeo.ru')){
+	if((hostname.endsWith('.nic.in') || hostname.endsWith('.gov.in')) && hostname.contains('ssc')){
+		if(hostname.match(/ssc(?:online)?2?\.(?:nic|gov)\.in/)) {
+			document.addEventListener('DOMContentLoaded', function() {
+				Object.defineProperty(window.navigator, "appName", {
+					get: function() { return 'Opera'}
+				});
+			}, false)
+		}
+		
+		log('PATCH-1173, ssc[online][2].{nic,gov}.in - Netscape not supported message - workaround browser sniffing');
+	} else if(hostname.endsWith('lingualeo.ru')){
 		addCssToDocument2('div.body-bg-top, div.body-bg-bot {-webkit-transform: none}')
 		log('PATCH-1171, lingualeo.ru - show embedded videos from ted.com');
 	} else if(hostname.endsWith('my.tnt.com')){
