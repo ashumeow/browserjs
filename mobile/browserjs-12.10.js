@@ -1,6 +1,6 @@
-// YSIogcWRT7zzQlx7bIIyKkNrFobye0FjZIa/9qych70NoXgx7ns/c+ngvmcphQZt9edFNRwkdGMSLJ70SACXPBD2uanypfJXyNReYpAXwgxfnouHR2aHsLe0QnztyKUxjf6APGCKgLq0ZFlR0xz+ilL0d3c61kRTjnJj7BEbxnGVEh3HSzxypgWJmnU4eM1+zY0WM7uuqH+qbfmVd0BxneHjNx8vP9QNaT6fr7EZnxTNTn9y+cdxwQp5TSud3sBPBTIzLKgKvf5Gfv2l3EuoTsCwCWgyx5NugbKtb0uLgg85HLhVu+Tuslt1rxQdb7SMD1qXhHSQl+mTFL3DugTi3A==
+// fpVTbbXHRzFECuYXvckkCAQBKE0VYQ0IG796sZ6oVWmjjqB79q/PoYzCD2xJLHWjH1/RFtGbmCHN4wEfBGoGsFOnZw1uuBV6QdUGqaRElVlVmXXMI9yaMAsJFbJVQZlrchSrspApDq1fBQ4CfAIp/wStLw8U51D5izvKmhCK3HqOf3yNu1R+1sc8J3RHm+bNy+XWj76wKUj3N6ZlWGVGzBRYFI9MCJaV51kJqwLQ5Pa+BEb477R65v7KuemT6XyEsOSJnWj9fXjkQ1rNM4+Hb/dMCXct0Lfwy5lxdhp3xe8IKbzs756CKPp8mgGW0qKNEcTLhWAkqJOU8MWm3Ifs2g==
 /**
-** Copyright (C) 2000-2013 Opera Software ASA.  All rights reserved.
+** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
 ** This file is part of the Opera web browser.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Mobile 12.10 core 2.11.355, April 3, 2013. Active patches: 226 ';
+	var bjsversion=' Opera Mobile 12.10 core 2.11.355, March 10, 2014. Active patches: 213 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -217,7 +217,7 @@ function stopKeypressIfDownCancelled(stopKey){
 
 	document.addEventListener("DOMContentLoaded", function (e) {
 		if( ( navigator.platform == "Android" || navigator.platform.indexOf("Linux armv") == 0 ) && !navigator.plugins.length ){
-			var xpath = '//object[starts-with(@data,"http://www.youtube.com/v/")] | //object//param[starts-with(@name,"src") and starts-with(@value,"http://www.youtube.com/v/")] | //embed[starts-with(@src,"http://www.youtube.com/v/")]';
+			var xpath = '//object[starts-with(@data,"http://www.youtube.com/v/")] | //object//param[starts-with(@name,"src") and starts-with(@value,"http://www.youtube.com/v/")] | //embed[starts-with(@src,"http://www.youtube.com/v/")] | //object[starts-with(@data,"https://www.youtube.com/v/")] | //object//param[starts-with(@name,"src") and starts-with(@value,"https://www.youtube.com/v/")] | //embed[starts-with(@src,"https://www.youtube.com/v/")]';
 			var nodes = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null);
 			for ( var i = nodes.snapshotLength-1; i >= 0 ; i-- ) {	
 				var id;
@@ -301,15 +301,7 @@ function stopKeypressIfDownCancelled(stopKey){
 	
 
 
-	if((hostname.indexOf('dmm.co.jp')>-1)||(hostname.indexOf('dmm.com')>-1)){
-		var cssText = '';
-		cssText += '.grd-red {background:-o-linear-gradient(top,#F33,#D00);}';
-		cssText += '.grd-gre {background:-o-linear-gradient(top,#9E2,#7B0);}';
-		cssText += '.grd-tbl, .btn-size-play {background:-o-linear-gradient(top,#1DF,#09C);}';
-		cssText += '.play-btn, .work-btn {background-size: 20px 20px!important;}';
-		addCssToDocument(cssText);
-		log('PATCH-1053, dmm.co.jp - add missing gradients and icon fix');
-	} else if((hostname.indexOf('mobile.gnavi.co.jp')>-1)||(hostname.indexOf('my.gnavi.co.jp')>-1)){
+	if((hostname.indexOf('mobile.gnavi.co.jp')>-1)||(hostname.indexOf('my.gnavi.co.jp')>-1)){
 		var cssText ='';
 		cssText +='.gnaviKeywordSearchWrap,#scBtn .group01 {box-sizing:border-box;}';
 		cssText +='input[type="submit"],#topAppMd p.btn,.btnFacebook, .btnBlue {background:-o-linear-gradient(top,#888,#333);}';
@@ -319,13 +311,6 @@ function stopKeypressIfDownCancelled(stopKey){
 		cssText +='.subarea .toggle_btn a {background-size:15px 15px!important;}';
 		addCssToDocument(cssText);
 		log('PATCH-1027, mobile.gnavi.co.jp,my.gnavi.co.jp - add missing gradients and layout fix');
-	} else if((hostname.indexOf('tokyo.jp')>-1)||(hostname.indexOf('lg.jp')>-1)){
-		if (location.pathname.indexOf('citymap')>-1) {
-			window.opera.defineMagicFunction('chkBrowser',function(){
-				return true;
-			},false);
-		}
-		log('PATCH-186, tokyo.jp, lg.jp enable maps');
 	} else if(hostname.endsWith('allbankonline.in')){
 		HTMLElement.prototype.onselectstart = true;
 		log('PATCH-889, allbankonline.in: prevent mousedown prevention');
@@ -480,13 +465,6 @@ function stopKeypressIfDownCancelled(stopKey){
 			addCssToDocument(cssText);
 			log('PATCH-984, ranking.goo.ne.jp - add missing gradients');
 		}
-		if(hostname.indexOf('www.goo.')>-1){
-			var cssText = '#searchtop {background: -o-linear-gradient(top,#CAEDFA,#A0DFF9 60%,#5EC7F4);}';
-			cssText +='#news ul.newstab li span a {background: -o-linear-gradient(top,#56BDEC,#3A9CD2);}';
-			cssText +='h2 {background: -o-linear-gradient(top, #7EBAD7,#52A0CC 50%, #89C2DD);}';
-			addCssToDocument(cssText);
-			log('PATCH-981, www.goo.ne.jp - add missing gradient and layout fix');
-		}
 		log('0, goo.ne.jp');
 	} else if(hostname.endsWith('insubuy.com')){
 		HTMLElement.prototype.onselectstart = true;
@@ -556,17 +534,6 @@ function stopKeypressIfDownCancelled(stopKey){
 	} else if(hostname.endsWith('loyalbank.com')){
 		HTMLElement.prototype.onselectstart = true;
 		log('PATCH-707, loyalbank.com: prevent mousedown prevention');
-	} else if(hostname.endsWith('m.iboa.pl')){
-		document.addEventListener('DOMContentLoaded',
-			function(){
-				var elm = document.querySelector('meta[name="viewport"]');
-				if(elm)elm.content += ' ,width=device-width';
-			}
-		,false);
-		log('PATCH-779, m.iboa.pl: make it fit device-width');
-	} else if(hostname.endsWith('m.mthai.com')){
-		addCssToDocument('.ui-body-m{background-image: -o-linear-gradient(top, #666, #222);}');
-		log('PATCH-752, m.mthai.com: add missing gradient');
 	} else if(hostname.endsWith('m.wikipedia.org')){
 		addCssToDocument('table{overflow: hidden;}tbody {height: 100%; overflow: visible;}')
 		log('PATCH-897, m.wikipedia.org: avoid scrolling tbody');
@@ -596,18 +563,12 @@ function stopKeypressIfDownCancelled(stopKey){
 			if(el)el.className = el.className.replace(/ui-mobile-rendering/, '');
 		}, false );
 		log('PATCH-820, politics.ie: make mobile version render');
-	} else if(hostname.endsWith('postdanmark.dk')){
-		addPreprocessHandler(/has_postMessage\s*=\s*window\[postMessage\]\s*&&\s*!\$\.browser\.opera;/, 'has_postMessage = true;',true,function(el){return el.src.indexOf('jquery.ba-postmessage.js')>-1;});
-		log('PATCH-1069, postdanmark.dk - remove sniff in jQuery postMessage plugin (incorrectly assumes lack of postMessage).');
 	} else if(hostname.endsWith('pulse.me')){
 		navigator.userAgent = 'Mozilla/5.0 (Windows NT 5.1; rv:16.0) Gecko/20100101 Firefox/16.0';
 		log('PATCH-1091, pulse.me - work around browser blocking');
 	} else if(hostname.endsWith('thaiair.co.jp')){
 		navigator.appName = 'M'+navigator.appName;
 		log('PATCH-943, thaiair.co.jp - fix drop-down menu positioning');
-	} else if(hostname.endsWith('www.dickmorris.com')){
-		addCssToDocument('*{content:normal !important}')
-		log('PATCH-929, dickmorris.com - avoid empty lightbox');
 	} else if(hostname.indexOf( '.56.com' )>-1){
 		addCssToDocument(".so {background-color:transparent !important;} .search .so .so_input .inp_search{ width:232px !important; } ");
 	
@@ -1257,9 +1218,6 @@ function stopKeypressIfDownCancelled(stopKey){
 			addCssToDocument('html{background:#fff}');
 		}
 		log('PATCH-617, missing QuickView background color on Forever21.co.jp');
-	} else if(hostname.indexOf('frys.com')>-1){
-		addPreprocessHandler('self.parent.location=document.location;','if(self!=top)self.parent.location=document.location;');
-		log('PATCH-638, frys.com: avoid racy framebuster due to lack of script async');
 	} else if(hostname.indexOf('ganji.cn')>-1){
 		if((hostname.indexOf('3g.')>-1 && location.search.indexOf('vvcc=3g')>-1) || location.search.length < 1) {
 			//NHSP-426 	  
@@ -1280,22 +1238,6 @@ function stopKeypressIfDownCancelled(stopKey){
 		opera.defineMagicVariable('is_nav', function(){return true;}, null);
 		
 		log('318050,  BlueCross browser sniffing prevents insurance search');
-	} else if(hostname.indexOf('goo-net.com')>-1){
-		if(pathname.indexOf('/ipn/')>-1){
-			var cssText = ''; 
-			cssText +='#top h2 {background:#25333B url(/usedcar/common/img/iphone/icon_titlebar.gif) no-repeat left center;}';
-			cssText +='#top h2 {background:url(/usedcar/common/img/iphone/icon_titlebar.gif) no-repeat left center, -o-linear-gradient(bottom, #25333B, #B6BEC9);}';
-			cssText +='#top h2 {background:url(/usedcar/common/img/iphone/icon_titlebar.gif) no-repeat left center, linear-gradient(to top, #25333B, #B6BEC9);}';
-			addCssToDocument(cssText);
-		}
-		else if(pathname.indexOf('/ipad/')>-1){
-			var cssText = ''; 
-			cssText +='header nav ul {background-color: #363636;}';
-			cssText +='header nav ul {background: -o-linear-gradient(top, #363636, #5A5A5A);}';
-			cssText +='header nav ul {background: linear-gradient(to bottom, #363636, #5A5A5A);}';
-			addCssToDocument(cssText);
-		}
-		log('PATCH-848, goo-net.com - add missing gradients and fallback bg color for mini');
 	} else if(hostname.indexOf('gougou.com')>-1){
 		addCssToDocument(".searchform .in_txt { width: 110px !important;} .searchform { width: 225px !important; }");
 		log('YUSHAN-2457, Fixed gougou.com search button display issue');
@@ -1651,13 +1593,6 @@ function stopKeypressIfDownCancelled(stopKey){
 		  addCssToDocument('.button, .button1{background:-o-linear-gradient(to bottom, #A9CA39, #689D00);} .categories ul li.blnone{clear:left;}');
 		}
 		log('NHSP-564, Button display issue of news.cn');
-	} else if(hostname.indexOf('nocoty.pl')>-1){
-		var cssText = '';
-		cssText += '.bar, .box .bar, .barList, .box .barList {background: linear-gradient(to bottom, #E30A7F, #FAC);}';
-		cssText += '.more, div.lnk, .exch table tr td, .tvNavBar, div.clr {background: linear-gradient(to bottom, #FFF, #C0C0C0);}';
-		addCssToDocument(cssText);
-		
-		log('PATCH-868, nocoty.pl - add missing gradients');
 	} else if(hostname.indexOf('o2active')!=-1){
 		addCssToDocument('body{width:100%!important; max-width:'+screen.width+'px;}');
 		log('266967, o2active.de, making sure narrow centered column does not appear off-screen');
@@ -1681,7 +1616,7 @@ function stopKeypressIfDownCancelled(stopKey){
 				document.getElementById('browserjs_status_message').firstChild.data='Browser.js is enabled! '+bjsversion;
 			}
 		}, false);
-		log('0, Browser.js status and version reported on browser.js documentation page');
+		log('1, Browser.js status and version reported on browser.js documentation page');
 	} else if(hostname.indexOf('ota.getvzappzone.com')!=-1){
 		forceMobileView();
 		log('TWEETY-192, Verizon Wireless mobile app zone site should default to mobile view');
@@ -1771,18 +1706,6 @@ function stopKeypressIfDownCancelled(stopKey){
 	} else if(hostname.indexOf('siren24.com')!=-1){
 		navigator.appName = 'Netscape';
 		log('SEOUL-609, ActiveX installation page redirect on siren24.com due to sniffing limitation on redirect script');
-	} else if(hostname.indexOf('smithbarney.com')>-1){
-		HTMLInputElement.prototype.__defineSetter__('type',function(){
-			if (this.getAttribute('type')!=arguments[0]) {
-				var doFocus=false, result;
-				if (this == document.activeElement) doFocus = true;
-				result = this.setAttribute('type',arguments[0]);
-				if (doFocus) this.focus();
-				return result;
-			}
-		});
-		
-		log('PATCH-360, Enable the password box on smithbarney.com');
 	} else if(hostname.indexOf('sp.mainichi.jp')>-1){
 		var cssText = '';
 		/* Top Menu */
@@ -1936,27 +1859,9 @@ function stopKeypressIfDownCancelled(stopKey){
 	} else if(hostname.indexOf('westjet.com')>-1 ){
 		opera.defineMagicVariable('browser', function(o){ o.isSupported=true; return o; }, null);
 		log('PATCH-260,  Westjet browser sniffing warns against Opera');
-	} else if(hostname.indexOf('wp.pl')>-1){
-		var cssText = '';
-		/* Page Top */
-		cssText += 'div.topLogo {background: -o-linear-gradient(top, #C6C7C9, #FFF);}';
-		cssText += 'div.topLogo {background: linear-gradient(to bottom, #C6C7C9, #FFF);}';
-		/* Page bottom menu */
-		cssText += '.menu {background: -o-linear-gradient(top, #D6D6D6, #F0F0F0);}';
-		cssText += '.menu {background: linear-gradient(to bottom, #D6D6D6, #F0F0F0);}';
-		addCssToDocument(cssText);
-		log('PATCH-864, wp.pl - add missing gradients');
 	} else if(hostname.indexOf('www.answers.com')>-1){
 		addCssToDocument('body{background-image: -o-linear-gradient(top,rgba(74,114,193,0.98),rgba(31,56,105,0.98)), url(http://en.site2.answcdn.com/templates/images/stripe.png?v=49d225d);}');
 		log('PATCH-719, answers.com: add background gradient');
-	} else if(hostname.indexOf('www.biglobe.ne.jp')>-1){
-		var cssText ='';
-		cssText +='ul.stabs li a.s_active {background:-o-linear-gradient(top,#04B,#49F);}';
-		cssText +='ul.stabs {background:-o-linear-gradient(top,#FFF,#CCC);}';
-		cssText +='div.search input.sfrm {width:98%;}';
-		cssText +='.title,a.topicsTtlBar {background:-o-linear-gradient(top,#06D,#5AF);}';
-		addCssToDocument(cssText);
-		log('PATCH-1004, www.biglobe.ne.jp - add missing gradients');
 	} else if(hostname=='live.vodafone.com'&&pathname.indexOf('/jumppage')==0){
 		forceMobileView();
 		log('362160, Display Vodafone\'s Google search site in Normal Zoom by default');
