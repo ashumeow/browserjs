@@ -1,4 +1,4 @@
-// HKfKeXzOSVLdX1a8U2wcB+u2Qwt5BtufFGfV4JhvG2gBr37rahGHX824ke+N6W14A6yiBicnsCsfWS48KDW8zPTmnjiL8MByrwG5E1BLmFi2bfl7PnkywGTMVwa0Vy6cxTwyOpLeJgOfV8z1zpxkUSYTkRS70Vf3kya0tzXe6P6GPz0lEccjpY/+H0JJV+xKuEIfpl/2Bo9SiZlwgwd2HT/0rU8/whBVuC7HmBQewrmNzL5Jlp+PQZWXKFXWp99aLvtxc4owh6obGPJjFrHfRDAgOCKbSP64qjvNiOZiC0rGyDXnSqtxpKrsNs1OJTisoHkq0A4xvVIOYxDp4BfWgw==
+// g9Ry0YXEHVb27H/n25ruNp/Aq+T2YN/I2ZBejDmZehU/OqgB0ndh0ZO3WyYnYf8J0fvM8pp4YVZJ7p0lpthc1ldADcyLpzInhGZioh6zlWFKzf4A4wan1ZIhIjOZ2QNmgeMPAtLZdNVSloxFXsHjashefQFMCKDdLOcuCzikeKVbGhyfTWbsjjjHkW+uP5SLcoTHvXeN6dLhmncQmbZ8vJUFXfI4zZVD2dhGUodG0qqtxOhDuRkSHAcPA1lT+sIQDHBTW93ES6B9RA3JGgM2x6III+flstalZqlgGrasfL7K2PA0i8BVXY1+BJ6ZdymSrCjBBpJjD+lXUweXIMAcwg==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -16,8 +16,8 @@
 **/
 // Generic fixes (mostly)
 (function(){
-	var bjsversion = " Opera OPRDesktop 15.0 core 1387.72, March 10, 2014." +
-					 " Active patches: 17 ";
+	var bjsversion = " Opera OPRDesktop 15.0 core 1387.77, March 17, 2014." +
+					 " Active patches: 18 ";
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
 
@@ -200,6 +200,14 @@
 				}
 			,false);
 			log('PATCH-1148, Google Translate: use flash instead of mp3-audio');
+		}
+		if(hostname.indexOf('.google.')>-1){
+			var _newUA = navigator.userAgent.replace(/ ?OPR.[0-9.]*/, '');
+			Object.defineProperty(window.navigator, "userAgent", {
+				get: function() {return _newUA}
+			});
+			
+			log('PATCH-1176, Navigation keys are not working on Google - hide Opera tag from userAgent for all sites');
 		}
 		log('0, Google');
 	} else if(hostname.indexOf('.yahoo.')>-1){
