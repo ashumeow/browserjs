@@ -1,4 +1,4 @@
-// g9Ry0YXEHVb27H/n25ruNp/Aq+T2YN/I2ZBejDmZehU/OqgB0ndh0ZO3WyYnYf8J0fvM8pp4YVZJ7p0lpthc1ldADcyLpzInhGZioh6zlWFKzf4A4wan1ZIhIjOZ2QNmgeMPAtLZdNVSloxFXsHjashefQFMCKDdLOcuCzikeKVbGhyfTWbsjjjHkW+uP5SLcoTHvXeN6dLhmncQmbZ8vJUFXfI4zZVD2dhGUodG0qqtxOhDuRkSHAcPA1lT+sIQDHBTW93ES6B9RA3JGgM2x6III+flstalZqlgGrasfL7K2PA0i8BVXY1+BJ6ZdymSrCjBBpJjD+lXUweXIMAcwg==
+// ZSydqcgdUWuLQI2TBtXs9EQ/rwbFNBVbly3er+y+4uLHBgrxnxZyqp1WZUeML9DBm4hH79j0tk2GTnNZAJpGS9T3JiFn0uc0FIfKY/j7zh5Ond2t76+sdemF7AAb1uz+ndHjOvg3HiQDt35m+8dvhXcIrxobVcDcXm0s0oTSHYE0p/3kG4Q+YMdhNp19P/F1iMpJYBQ5Ql96mZMZgudF9VFuYmSgQwWnyLb2kd05tagcH0mSL3SNsESkb+XTypbPhLFoJquLAZxDZYb/9pzKNCGIPBavqR1CZrf5XNRvq4GbMCP00a22dfB8rQeMjQtclDr+dU7NqVgL5lDLQm1XSQ==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -16,8 +16,8 @@
 **/
 // Generic fixes (mostly)
 (function(){
-	var bjsversion = " Opera OPRDesktop 15.0 core 1387.77, March 17, 2014." +
-					 " Active patches: 18 ";
+	var bjsversion = " Opera OPRDesktop 15.0 core 1387.77, May 16, 2014." +
+					 " Active patches: 17 ";
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
 
@@ -47,20 +47,18 @@
 
 	/* We make references to the following functions to not get version that users
 	have overwritten */
-	var call = Function.prototype.call;
-	var getElementsByTagName = Document.prototype.getElementsByTagName;
 	var addEventListener = Window.prototype.addEventListener;
+	var appendChild = Node.prototype.appendChild;
+	var call = Function.prototype.call;
 	var createElement = Document.prototype.createElement;
 	var createTextNode = Document.prototype.createTextNode;
+	var getElementsByTagName = Document.prototype.getElementsByTagName;
 	var insertBefore = Node.prototype.insertBefore;
+	var querySelector = Document.prototype.querySelector;
 	var setAttribute = Element.prototype.setAttribute;
-	var appendChild = Node.prototype.appendChild;
 	var setTimeout = window.setTimeout;
 
 	function log(str) {
-		if (self != top || str.match(/^0,/)) {
-			return;
-		}
 		console.log("Opera has modified script or content on "
 								+ hostname + " (" + str + "). See browser.js for details");
 	}
@@ -105,20 +103,20 @@
 		log('PATCH-1173, ssc[online][2].{nic,gov}.in - Netscape not supported message - workaround browser sniffing');
 	} else if(hostname.endsWith('.icloud.com')){
 		Object.defineProperty(window, "SC", {
-			get: function(){return this._foo},
+			get: function(){return this.__SC__},
 			set: function(arg) {
 				if(!arg.hasOwnProperty('browser')) {
 					Object.defineProperty(arg, "browser", {
-						get: function(){return this._foobar},
+						get: function(){return this.__browser__},
 						set: function(arg) {
 							arg.isChrome = true;
 							arg.current = "chrome";
 							arg.chrome = arg.version;
-							this._foobar = arg;
+							this.__browser__ = arg;
 						}
 					});
 				}
-				this._foo = arg;
+				this.__SC__ = arg;
 			}
 		});
 		log('PATCH-1174, iCloud iWork new document stays blank - camouflage as Chrome');
@@ -209,10 +207,6 @@
 			
 			log('PATCH-1176, Navigation keys are not working on Google - hide Opera tag from userAgent for all sites');
 		}
-		log('0, Google');
-	} else if(hostname.indexOf('.yahoo.')>-1){
-		/* Yahoo! */
-		log('0, Yahoo!');
 	} else if(hostname.indexOf('.youtube.com')>-1){
 		if( navigator.mimeTypes['application/x-shockwave-flash'] && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin ){
 		 HTMLMediaElement.prototype.canPlayType = function(){return ''}
@@ -220,12 +214,14 @@
 		log('PATCH-1164, YouTube force Flash player for HTML5 content');
 	} else if(hostname.indexOf('opera.com')>-1&& pathname.indexOf('/docs/browserjs/')==0){
 		document.addEventListener('DOMContentLoaded',function(){
-			if(document.getElementById('browserjs_active')){
-				document.getElementById('browserjs_active').style.display='';
-				document.getElementById('browserjs_active').getElementsByTagName('span')[0].appendChild(document.createTextNode(bjsversion));
-				document.getElementById('browserjs_status_message').style.display='none';
-			}else if(document.getElementById('browserjs_status_message')){
-				document.getElementById('browserjs_status_message').firstChild.data='Browser.js is enabled! '+bjsversion;
+			var browserjs_active = document.getElementById('browserjs_active');
+			var browserjs_status_message = document.getElementById('browserjs_status_message');
+			if(browserjs_active && browserjs_active.getElementsByTagName('span').length>0){
+				browserjs_active.style.display='';
+				browserjs_active.getElementsByTagName('span')[0].appendChild(document.createTextNode(bjsversion));
+				if(browserjs_status_message){
+					browserjs_status_message.style.display='none';
+				}
 			}
 		}, false);
 		log('1, Browser.js status and version reported on browser.js documentation page');
@@ -241,10 +237,10 @@
 	} else if(pathname.indexOf('/AnalyticalReporting/')==0){
 		if(pathname.indexOf('AnalyticalReporting/WebiModify.do')>-1 || pathname.indexOf('AnalyticalReporting/WebiCreate.do')>-1){
 			Object.defineProperty(window, 'embed_size_attr', {
-				get:function(){return this._foobar},
+				get:function(){return this.__embed_size_attr__},
 				set:function(arg){
-					if(arg=='style="width: 100%; height: 100%;')this._foobar='style="width: 100%; height: 100%;"';
-					else this._foobar = arg;
+					if(arg.split('"').length==2)arg+='"';
+					this.__embed_size_attr__ = arg;
 				}
 			});	
 		}
