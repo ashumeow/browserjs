@@ -1,4 +1,4 @@
-// Se3MjcwWdPt+hAyJlBf0nh7V+0VYaTRba4mZnetKsACpTUA7+bi6w0tu9hIkRIcMHp2PvUHKRu+TdmlWPxtn3jC1LeKfvU/zWipvM67wq7VWsttigH2RtQZTZSyR6OywsXmYAxJODrJfxR+neDRqhJ+2//wWSdRwrzSCVprigghuiOLzL9oeKx/h3Pdd+kXQxfrq2uqbO8zdeGCIIGAU/CVzKbaocdgec4gjWCxJhyYLoAwfjbdjbinqekV/Zy33DwuRg1jT0EV2fdp0lkpvtfIuvwzw1AzyZplBp3TSdV1xPysNxpkPoZcDRbo/xrmEdXSGsW7iXiuf6aNDPLKg+Q==
+// krINcjmbEokoYp7z9ftxko0R5yI7+zpAl5+RJinYzahY4DDfHZEMHtdxzbnRpoEOsqUxj1B+JErQgQievFF4ae3PvNcYWy9N062XcKxFulWBlxgXm3xWNoVXaINFyHFrUh2MvhtYOWvYeFrMgr3daOoTFprkHQLzT02chFrCOByqGAUldQzsVQPCuqBIH85LICIuD5YccIwNPYe2C30TzT4xIXAKnmMbZs7bi+qafltbq2iFegW5LUUFiwA5SD3gHtP2gvjYQ4xvabC6jxc1JpZBwbCwkwym5Fjf04E29rrCD0ImiFdo8mgWhTn6MBt0xrQ7w+cLT3QXp9X2iAJnWQ==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Desktop 12.01 core 2.10.289, January 21, 2014. Active patches: 309 ';
+	var bjsversion=' Opera Desktop 12.01 core 2.10.289, May 13, 2014. Active patches: 301 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -802,9 +802,6 @@ function setTinyMCEVersion(e){
 	} else if(hostname.endsWith('bnpparibasfortis.be')){
 		if(pathname.indexOf('/portal/Start')==0){addCssToDocument('tr#steps{z-index:2}')}
 		log('PATCH-1094, bnpparibasfortis.be - unclickable radio buttons');
-	} else if(hostname.endsWith('book.lufthansa.com')){
-		addCssToDocument('td.fare input, td.fareOff input{position:inherit !important}');
-		log('PATCH-1018, lufthansa.com - fix unclickable positioned inputs');
 	} else if(hostname.endsWith('caisse-epargne.fr')){
 		addPreprocessHandler(/this\._changeHandler\);if\s*\(Sys\.Browser\.agent\s==\sSys\.Browser\.Opera\)/g, ' this._changeHandler);if(false)');
 		log('PATCH-798, Avoid browser sniffing that breaks typing');
@@ -914,7 +911,6 @@ function setTinyMCEVersion(e){
 			
 			log('PATCH-714, facebook: prevent chat window overflow - Presto bug\nPATCH-1055, Facebook - Work around issue where Flash does not call JS when expected\nPATCH-488, Facebook: fake paste event to make show preview immediately after pasting links in status\nPATCH-573, Facebook\'s border-radius triggers hyperactive reflow bug, performance suffers\nPATCH-923, facebook: work around lack of pointer-events blocking video playback\nPATCH-954, facebook: work around lack of pointer-events breaking group page photos');
 		}
-		log('0, Facebook');
 	} else if(hostname.endsWith('flipkart.com')){
 		(function(){
 		  var deferredEvents=[];
@@ -1071,12 +1067,6 @@ function setTinyMCEVersion(e){
 	} else if(hostname.endsWith('oly-forum.com')){
 		addCssToDocument('#navigation ul#menu li { margin-left: 0; }');
 		log('PATCH-922, oly-forum.com: better placement of menu dropdown');
-	} else if(hostname.endsWith('onlystudy.cn')){
-		document.addEventListener('DOMContentLoaded',function(){
-			var elm = document.getElementById('loginpw');
-			if(elm)elm.setAttribute('onKeyDown',elm.getAttribute('onKeyDown').replace(/KsdOnKeyDown\(\)/,'KsdOnKeyDown(e)'))
-		},false);
-		log('PATCH-873, Make sure an event is passed in to the handler');
 	} else if(hostname.endsWith('openphoto.me')){
 		fixTransitionEndCase();
 		log('PATCH-874, Fix transition event case to un-confuse jQuery');
@@ -1249,36 +1239,18 @@ function setTinyMCEVersion(e){
 	} else if(hostname.endsWith('www.lingvo.ru')){
 		addPreprocessHandler(/a\.unselectable="on";if\(window\.opera\)\{a\.onmousedown=function\(\)\{return\s*false\}\}/,'a.unselectable="on";if(!window.opera){a.onmousedown=function(){return false}}');
 		log('PATCH-925, lingvo.ru: prevent mousedown prevention');
-	} else if(hostname.endsWith('www.myntra.com')){
-		addCssToDocument('div.mk-category-page{width:980px}');
-		log('PATCH-1089, myntra.com - content wraps');
 	} else if(hostname.endsWith('www.state.gov')){
 		opera.addEventListener('BeforeScript',function(e){
 			if(e.element.src.indexOf('sifr-config.js')>-1){e.preventDefault();}
 		},false);
 		log('PATCH-1107, state.gov: avoid sifr usage');
 	} else if(hostname.endsWith('www.udemy.com')){
-		window.addEventListener('load',
-		function(){
-			document.getElementById('login').style.visibility = 'hidden';
-			document.querySelector('a.goto-login-btn').addEventListener('click',function(){
-				document.getElementById('signup').style.visibility = 'hidden';
-				document.getElementById('login').style.visibility = 'visible';
-			},false);
-			document.querySelector('a.goto-signup-btn').addEventListener('click',function(){
-				document.getElementById('signup').style.visibility = 'visible';
-				document.getElementById('login').style.visibility = 'hidden';
-			},false);
-		}
-		,false);
-		
-	
 		opera.addEventListener('BeforeEvent.click', function(e) { 
 			if (e.event.target.className == 'placeholder') { 
 				e.event.target.previousSibling.focus();
 			}
 		}, false); 
-		log('PATCH-853, udemy.com: Opera doesn\'t support 3Dtransforms yet\nPATCH-871, udemy.com: work around lack of pointer-events in Opera');
+		log('PATCH-871, udemy.com: work around lack of pointer-events in Opera');
 	} else if(hostname.endsWith('www.zebra.com')){
 		addCssToDocument('div.tabs{content:normal !important}');
 		log('PATCH-1083, zebra.com - generated content on real elements');
@@ -1316,7 +1288,6 @@ function setTinyMCEVersion(e){
 			addPreprocessHandler(/\|\|adsUA\.indexOf\(\'opera\'\)>-1/,'');
 			log('188197, Making sure AOL pages are not overwritten by ad script\nPATCH-608, Aol.com: Avoid ad overwrite');
 		}
-		log('0, AOL');
 	} else if(hostname.indexOf('.bmo.com')>-1){
 		addPreprocessHandler(/return "\(\?:"\+([^+]+)\+([^+]+)\+([^+]+)\+"\)\?";/, 'return ($1+$2+$3=="") ? "(?:)" : "(?:"+$1+$2+$3+")?";' );
 		log('PATCH-676, RegExp parsing exception confuses Dojo, breaks BMO.com interface');
@@ -1393,7 +1364,6 @@ function setTinyMCEVersion(e){
 			
 			log('PATCH-195, Avoid IFRAME resize causing lots of empty space on auctions (the IFRAME part)');
 		}
-		log('0, eBay');
 	} else if(hostname.indexOf('.geoaccess.com')>-1){
 		navigator.appName='Netscape';
 		opera.defineMagicVariable('is_nav6up', function(){return true},null);
@@ -1479,7 +1449,6 @@ function setTinyMCEVersion(e){
 			opera.addEventListener('BeforeEventListener.mousedown', function(e){if(e.event.target.tagName=='OPTION')e.preventDefault()}, false);
 			log('PATCH-610, GMaps: avoid autoclose of problem reporting dialog');
 		}
-		log('0, Google');
 	} else if(hostname.indexOf('.hbo.com')>-1){
 		opera.defineMagicFunction('olderBrowserUnsupported', function(){return false;});
 		opera.defineMagicFunction('browserVersionGood', function(){return true;});
@@ -1525,9 +1494,6 @@ function setTinyMCEVersion(e){
 	} else if(hostname.indexOf('.intel.com')>-1){
 		addCssToDocument('div#browserdetectid{display:none !important}');
 		log('PATCH-723, intel.com: hide "old_browser" message');
-	} else if(hostname.indexOf('.nab.com.au')>-1){
-		opera.defineMagicFunction('detectBrowser', function(){return 'correct';});
-		log('PATCH-643, nab.com.au: avoid browser warning');
 	} else if(hostname.indexOf('.sina.com.cn')>-1){
 		navigator.userAgent += ' not Gecko';
 		log('PATCH-614, sina.com: video doesn\'t play due to missing script readystate support');
@@ -1731,12 +1697,24 @@ function setTinyMCEVersion(e){
 			null);
 			log('PATCH-498, Yahoo! Japan services block Opera from using Silverlight plugin');
 		}
+		if(hostname.value=='answers.yahoo.com'){
+			var __checkloop__=setInterval(function(){
+				var panel, button;
+				if ((panel = document.getElementById('lgtbox_msg_panel')) &&
+					/optimiz.*browser/.test(panel.innerText) &&
+					(button = document.getElementById('btn_ok')) && 
+					button.click){
+					button.click();
+					clearInterval(__checkloop__);
+				}
+			}, 333);
+			log('PATCH-1181, hide "Yahoo Answers is not optimized for your browser"-message');
+		}
 		if(self==top&&hostname.indexOf('.mail.yahoo.co.jp')>-1&&(href.indexOf( '/neo/launch' )>-1&&location.search.indexOf('?reason=ignore')!=0)){
 			location.href='/neo/launch?reason=ignore'+location.search.replace(/^\?/, '&');
 			
 			log('PATCH-325, Y!Mail work around browser blocking');
 		}
-		log('0, Yahoo!');
 	} else if(hostname.indexOf('.yammer.com')>-1){
 		window.addEventListener('message', function(e){
 			if(e.data=='{"__opera_bjs_getURL":""}' && e.origin.match(/https:\/\/(www|ymodules)\.yammer\.com/)){
@@ -2060,9 +2038,6 @@ function setTinyMCEVersion(e){
 		}, false);
 		
 		log('PATCH-577, Unexpected script loading order breaks video player ready check');
-	} else if(hostname.indexOf('nbs.rs')>-1){
-		fixIFrameSSIscriptII('dyniframesize', 'rir');
-		log('PATCH-704, nbs.rs: fix iframe resize');
 	} else if(hostname.indexOf('news.qq.com')>-1){
 		var gEBI=document.getElementById;
 		document.getElementById=function(){
@@ -2085,15 +2060,16 @@ function setTinyMCEVersion(e){
 		// PATCH-679, officeapps.live.com: correct MouseEvent button
 	
 		MouseEvent.prototype.__defineGetter__('button',function(){return this.which == 2 ? 1 : this.which == 3 ? 2 : 0;})
-		log('0, Microsoft Office Web Apps');
 	} else if(hostname.indexOf('opera.com')>-1&& pathname.indexOf('/docs/browserjs/')==0){
 		document.addEventListener('DOMContentLoaded',function(){
-			if(document.getElementById('browserjs_active')){
-				document.getElementById('browserjs_active').style.display='';
-				document.getElementById('browserjs_active').getElementsByTagName('span')[0].appendChild(document.createTextNode(bjsversion));
-				document.getElementById('browserjs_status_message').style.display='none';
-			}else if(document.getElementById('browserjs_status_message')){
-				document.getElementById('browserjs_status_message').firstChild.data='Browser.js is enabled! '+bjsversion;
+			var browserjs_active = document.getElementById('browserjs_active');
+			var browserjs_status_message = document.getElementById('browserjs_status_message');
+			if(browserjs_active && browserjs_active.getElementsByTagName('span').length>0){
+				browserjs_active.style.display='';
+				browserjs_active.getElementsByTagName('span')[0].appendChild(document.createTextNode(bjsversion));
+				if(browserjs_status_message){
+					browserjs_status_message.style.display='none';
+				}
 			}
 		}, false);
 		log('1, Browser.js status and version reported on browser.js documentation page');
@@ -2208,10 +2184,6 @@ function setTinyMCEVersion(e){
 			}
 		}, false);
 		log('PATCH-538, Pre-process script to avoid "too deeply nested input" error, internal limits in Opera\'s ES engine too low');
-	} else if(hostname.indexOf('talenthouse.com')>-1){
-		opera.defineMagicVariable('th', function(obj){if(obj.ui)obj.ui.browserOk=function(){return true};return obj;}, null);
-		
-		log('PATCH-689, talenthouse.com: work around browser sniff');
 	} else if(hostname.indexOf('tdwaterhouse.ca')>-1&&location.protocol=='https:'){
 		document.domain='tdwaterhouse.ca';
 		log('147840, tdwaterhouse.ca login fails - cross-domain access on https disallows setting location');
@@ -2221,15 +2193,6 @@ function setTinyMCEVersion(e){
 	} else if(hostname.indexOf('tistory.com')!=-1){
 		addCssToDocument('#memberbox .btn-login {text-indent:-100px;}');
 		log('347990, two login buttons on tistory.com');
-	} else if(hostname.indexOf('tradera.com')>-1){
-		document.addEventListener('DOMContentLoaded',function(e){
-			var els = document.getElementsByClassName('headerWrapperThin');
-			for (var i=0,len=els.length;i<len;i++) {
-				var pnstyle = els[i].parentNode.getAttribute('style');
-				els[i].parentNode.setAttribute('style',(pnstyle?pnstyle+' ':'')+els[i].getAttribute('style'));
-			}
-		},false);
-		log('PATCH-427, layout issue on Tradera.com\'s header');
 	} else if(hostname.indexOf('tuenti.com')!=-1){
 		navigator.userAgent += ' [NOT firefox/3]';
 		log('PATCH-134, Videos not shown');
@@ -2241,9 +2204,6 @@ function setTinyMCEVersion(e){
 			}
 		},false);
 		log('PATCH-596, tvguide.co.uk - Fix double descriptions appearing in TV listing');
-	} else if(hostname.indexOf('tvguide.com')>-1){
-		opera.defineMagicVariable('isSafari', function(){return true;}, null);
-		log('PATCH-274, TVGuide doesn\'t show program descriptions, due to browser sniffing');
 	} else if(hostname.indexOf('twitter.com')>-1){
 		addCssToDocument('strong.fullname + span:not([class]){content:""}');
 	
