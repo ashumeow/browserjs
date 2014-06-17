@@ -1,4 +1,4 @@
-// ZSydqcgdUWuLQI2TBtXs9EQ/rwbFNBVbly3er+y+4uLHBgrxnxZyqp1WZUeML9DBm4hH79j0tk2GTnNZAJpGS9T3JiFn0uc0FIfKY/j7zh5Ond2t76+sdemF7AAb1uz+ndHjOvg3HiQDt35m+8dvhXcIrxobVcDcXm0s0oTSHYE0p/3kG4Q+YMdhNp19P/F1iMpJYBQ5Ql96mZMZgudF9VFuYmSgQwWnyLb2kd05tagcH0mSL3SNsESkb+XTypbPhLFoJquLAZxDZYb/9pzKNCGIPBavqR1CZrf5XNRvq4GbMCP00a22dfB8rQeMjQtclDr+dU7NqVgL5lDLQm1XSQ==
+// dK0+JCz7jzgofH3veARatWDRz2EhBGZWSk1+6DXgl36sNiEuOBmTSvlWp9zJleygRD75Ft3IL1mMr8N5aPkizXqNXoTnjSRaRtD+6yr9I3v8kq2T1UJldZomDBww5oAVjNNnYb4k5Ae6S9JTslhkP5Ioe+IfF5BbGrQ2cgPsR2fMj+LzK7euGMe6h321DPEsRsqt62niabBAI4ZYyyHmdNSYlq8tqrtb1C8LpnfMAJVjjmqCDAUD/PcPT4AtZX+n5xiK9SHUhDnbbA51Ls2ejsYsT2YMFCdycnq+qVAk3XSxnU1B1926UcFEfBrVkJoBl0v57nsp2MX/PxuFKGgYHg==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -16,8 +16,11 @@
 **/
 // Generic fixes (mostly)
 (function(){
-	var bjsversion = " Opera OPRDesktop 15.0 core 1387.77, May 16, 2014." +
-					 " Active patches: 17 ";
+	if(location.href.indexOf('operabrowserjs=no')!=-1) {
+		return;
+	}
+	var bjsversion = " Opera OPRDesktop 15.0 core 1387.77, June 17, 2014." +
+					 " Active patches: 16 ";
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
 
@@ -180,13 +183,6 @@
 			addCssToDocument2('div.n6 {display: block !important} table.cf.hX{display:inline-table}');//"more", labels
 			log('PATCH-1163, No "More" button in Gmail and misaligned labels');
 		}
-		if(hostname.contains('otvety.google.')){
-			document.addEventListener('DOMContentLoaded', function() {
-				var elm = document.querySelector('div.unspbr');
-				if (elm) { elm.remove(); }
-			});
-			log('PATCH-1168, otvety.google.ru - remove "unsupported browser" banner');
-		}
 		if(hostname.contains('translate.google.')){
 			document.addEventListener('DOMContentLoaded',
 				function(){
@@ -199,13 +195,13 @@
 			,false);
 			log('PATCH-1148, Google Translate: use flash instead of mp3-audio');
 		}
-		if(hostname.indexOf('.google.')>-1){
+		if(pathname.indexOf('hangouts')==-1){
 			var _newUA = navigator.userAgent.replace(/ ?OPR.[0-9.]*/, '');
 			Object.defineProperty(window.navigator, "userAgent", {
 				get: function() {return _newUA}
 			});
 			
-			log('PATCH-1176, Navigation keys are not working on Google - hide Opera tag from userAgent for all sites');
+			log('PATCH-1176, Navigation keys are not working on Google - hide Opera tag from userAgent for all sites except hangouts');
 		}
 	} else if(hostname.indexOf('.youtube.com')>-1){
 		if( navigator.mimeTypes['application/x-shockwave-flash'] && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin ){

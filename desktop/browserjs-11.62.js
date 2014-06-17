@@ -1,4 +1,4 @@
-// TZwJBrCZJrpgc8aR2b4e6YhO/buX2TJwgP9YmmbTL2W7Emk2TtPkKqgg8yfUygRt2wF+wm0ou/gRMhzqqBq0Lbs8eUn3YhXMcX4kbKevd6G9WShFyYzFzDKMSX5FMDZhh0g1CdGXNTmC8NwHSOn2fpJdBq60+G61oGaajlRfqzkpVPr8EIyffSM6/4bCKm0HSvdLkz9c4DzNiExwCwNGIj4Q3wzNgK1/6bcLuL8X5Uf3qmEihNMtU2yOS2lS6d8lI6bzG679x60Wo0ptuq8v+MWYABAd7chY1L8jSXEhpoZTK1OqgTSoY/8KplSjQDe2fC0ChpfVBCOJ+dojMkj8ew==
+// ZE5nIWiNJBdrKSKcN3+FW1L5HL7RbNsbL7ksycyCmxrVueQxbgOEhdVLGv1+koPT2Rsdc9E/xERJvR0M9d3/eZMrFm6C+6lPGOcTOXTmhK0cxq4GVoOT9Qzug7kbjpXJvNLDhYi/srjcY7xs4CagPwliER5xc+qwLh65vTraPYSVImOcWtAf8TqCiMG7INAjQK4plJon0rsUJQlgsFRY3b6qTcOS5NF4ChSidRx2jMlkL1kZxdJ1V6QFCXBG+NcNQIv43lvweQIMFhMX/EyASL83oo2zVtSLItIpALqX8Fnlv0ZN0jIxLl1gODg3gbTpRi0DX5OXJ/Uk5TD3CxtoyA==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Desktop 11.62 core 2.10.229, May 13, 2014. Active patches: 274 ';
+	var bjsversion=' Opera Desktop 11.62 core 2.10.229, June 17, 2014. Active patches: 271 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -1066,10 +1066,6 @@ function setTinyMCEVersion(e){
 	} else if(hostname.endsWith('try.jquery.com')){
 		addPreprocessHandler(/if\s*\(\$\.browser\.webkit\s*\|\|\s*\$\.browser\.mozilla\)\s*return false;/, 'return false;')
 		log('PATCH-1123, Prevent unwanted scrolling in Code School editor');
-	} else if(hostname.endsWith('usbank.com')){
-		opera.defineMagicVariable('is_opera',function(){return false},null);
-		opera.defineMagicVariable('is_nav6up',function(){return true},null);
-		log('PATCH-1076, usbank.com - avoid unsupported browser alert');
 	} else if(hostname.endsWith('washingtonpost.com')){
 		addPreprocessHandler(  /if\(\(b\.webkit\|\|b\.gecko\)&&y\.type==="css"\)/  ,'if((b.webkit||b.gecko||b.opera)&&y.type==="css")' , true, function(el){return el.src.indexOf('yui/yui-min.js')>-1;} );
 	
@@ -1550,19 +1546,6 @@ function setTinyMCEVersion(e){
 			},
 			null);
 			log('PATCH-498, Yahoo! Japan services block Opera from using Silverlight plugin');
-		}
-		if(hostname.value=='answers.yahoo.com'){
-			var __checkloop__=setInterval(function(){
-				var panel, button;
-				if ((panel = document.getElementById('lgtbox_msg_panel')) &&
-					/optimiz.*browser/.test(panel.innerText) &&
-					(button = document.getElementById('btn_ok')) && 
-					button.click){
-					button.click();
-					clearInterval(__checkloop__);
-				}
-			}, 333);
-			log('PATCH-1181, hide "Yahoo Answers is not optimized for your browser"-message');
 		}
 		if(self==top&&hostname.indexOf('.mail.yahoo.co.jp')>-1&&(href.indexOf( '/neo/launch' )>-1&&location.search.indexOf('?reason=ignore')!=0)){
 			location.href='/neo/launch?reason=ignore'+location.search.replace(/^\?/, '&');
@@ -2134,10 +2117,6 @@ function setTinyMCEVersion(e){
 			}
 		},false);
 		log('PATCH-671, Twitter: avoid ghost @ before username\nPATCH-744, Twitter: work around comma-separated statement limit in Carakan ES engine\nPATCH-561, Twitter: allow selection in TEXTAREA\nPATCH-1130, Make sure click inside tweet editor focuses it, even if outside the editable line');
-	} else if(hostname.indexOf('virginamerica.com')>-1){
-		navigator.appName='Netscape';
-		opera.defineMagicVariable('browserType',function(){return 'gecko'},null);
-		log('PATCH-492, virginamerica.com - Fix browser sniffing');
 	} else if(hostname.indexOf('wangpiao.com')>-1){
 		window.constructor={};
 		window.constructor.prototype={};

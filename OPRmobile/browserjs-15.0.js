@@ -1,4 +1,4 @@
-// VX9baqSEYVO9qlhXqkGoLYfYh7WpT8c4egOkL5jMg7sX3oQ6fChwu1YvVvsSfkmLWsF1JZUj9oL2gK96zDsDNwfRhKiV0GnffNXJVl7z33RpufRXq0ZOdPVx40CfnCX9ByEJsdZLGPZSTNWae7yqkVHpxwMhBArM+9uILmcyM+03v+w6nIh9k+45JsapUuj46ItFkGO+GCWjA5i+0m3F3AqLU5gn1k31ZcVFC8swPl9XY7eytT5vDM46p8sT4uY6NKd7xLMuOY9dHQeGySwHKCCrPU2hcv4Lwc9nqqT8fi/InrCgzSewJcof/8TZDt7+2NZmomFFx11GGve8g8JAYg==
+// hnAb89O5soI2VuVlgkPYHzUCUPFfWSKC9YacfA+FWM9KWyCHPmvEBsOe673NmooxLjR1PY9zkOykrC1xe27eAuX7MrtkxdBzGogL0/332lqUr/V83T4kRCmrTzOrMaeyX9AMV24b+J+d8G67z1egVOdU7xIsH7Qt8s/gdcrPJ07ijVCQY5raY7ebpc/GnWRAakGjyuLd+P/9D89m6fM3VAdPw3fIFpFMfZz9tLjlck8BNgodBfF5E/p9VZsuAIRuHkkSnsXJpqk+QNFTHjazS5Yiz8YXytmosVVSDHGlYwOH2/b9ssT5jhKR4G2+NnO1SxxmbPGD+VnT4hslxVLWiA==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -16,7 +16,10 @@
 **/
 // Generic fixes (mostly)
 (function(){
-	var bjsversion = " Opera OPRMobile 15.0 core 1162.59591, March 10, 2014." +
+	if(location.href.indexOf('operabrowserjs=no')!=-1) {
+		return;
+	}
+	var bjsversion = " Opera OPRMobile 15.0 core 1162.59591, June 17, 2014." +
 					 " Active patches: 4 ";
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -47,20 +50,18 @@
 
 	/* We make references to the following functions to not get version that users
 	have overwritten */
-	var call = Function.prototype.call;
-	var getElementsByTagName = Document.prototype.getElementsByTagName;
 	var addEventListener = Window.prototype.addEventListener;
+	var appendChild = Node.prototype.appendChild;
+	var call = Function.prototype.call;
 	var createElement = Document.prototype.createElement;
 	var createTextNode = Document.prototype.createTextNode;
+	var getElementsByTagName = Document.prototype.getElementsByTagName;
 	var insertBefore = Node.prototype.insertBefore;
+	var querySelector = Document.prototype.querySelector;
 	var setAttribute = Element.prototype.setAttribute;
-	var appendChild = Node.prototype.appendChild;
 	var setTimeout = window.setTimeout;
 
 	function log(str) {
-		if (self != top || str.match(/^0,/)) {
-			return;
-		}
 		console.log("Opera has modified script or content on "
 								+ hostname + " (" + str + "). See browser.js for details");
 	}
@@ -101,17 +102,41 @@
 			window.dispatchEvent(ev);
 		},false);
 		log('PATCH-1153, Bing - fix viewport after rotation');
-	} else if(hostname.indexOf('.yahoo.')>-1){
-		/* Yahoo! */
-		log('0, Yahoo!');
+	} else if(hostname.indexOf('.google.')>-1){
+		Object.defineProperty(window, "_", {
+			get: function(){return this.__uderscore__},
+			set: function(arg) {
+				for(var i=65;i<=122;i++) { //iterate over A-z
+					if(i>90 && i<97) continue; // skip characters between Z and a: [\]^_`
+					(function(index){
+						var propertyName = String.fromCharCode(index)+'b';
+						if(!arg.hasOwnProperty(propertyName)) {
+							Object.defineProperty(arg, propertyName, {
+								get: function(){return this['__'+propertyName+'__']},
+								set: function(arg) {
+									if(String(arg).match(/function \(\){return\(0,_\.(.*)\)\("Opera"\)\|\|\(0,_\.\1\)\("OPR"\)}/))
+										arg=function(){return false};
+									this['__'+propertyName+'__'] = arg;
+								}
+							});
+						};
+					})(i);
+				}
+			this.__uderscore__ = arg;
+			}
+		});
+		
+		log('PATCH-1178, Google sniffing gone bad - iterate over [A-z]b');
 	} else if(hostname.indexOf('opera.com')>-1&& pathname.indexOf('/docs/browserjs/')==0){
 		document.addEventListener('DOMContentLoaded',function(){
-			if(document.getElementById('browserjs_active')){
-				document.getElementById('browserjs_active').style.display='';
-				document.getElementById('browserjs_active').getElementsByTagName('span')[0].appendChild(document.createTextNode(bjsversion));
-				document.getElementById('browserjs_status_message').style.display='none';
-			}else if(document.getElementById('browserjs_status_message')){
-				document.getElementById('browserjs_status_message').firstChild.data='Browser.js is enabled! '+bjsversion;
+			var browserjs_active = document.getElementById('browserjs_active');
+			var browserjs_status_message = document.getElementById('browserjs_status_message');
+			if(browserjs_active && browserjs_active.getElementsByTagName('span').length>0){
+				browserjs_active.style.display='';
+				browserjs_active.getElementsByTagName('span')[0].appendChild(document.createTextNode(bjsversion));
+				if(browserjs_status_message){
+					browserjs_status_message.style.display='none';
+				}
 			}
 		}, false);
 		log('1, Browser.js status and version reported on browser.js documentation page');
