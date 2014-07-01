@@ -1,4 +1,4 @@
-// uPsDZ2bacqTmwg5dbpaoFTd4Z3TGs6zPZVfHSZpsRyEumL8+PNtb+6juU5tYIpcrTwSaLnmBKf/aqkyIhzkdKxWDt5Aeb9wxawKmyz45N4Tj8L00GYHnXkx2Es6nLBNKNekXu5Ggx6jlob8433KCZqbry0npl4Lx8S+22o0G/ZYbL5ItOz/16x6wzcK64t+hzWbO1ySYGEv+sSfRekbJCX8IktWGhkRgNAYXP4sYTFCLR3cP/hQRxLZRU3jx5hvSpRP/cbJgXLbgLZAsqcD/DB9dGavtDQXQ3P1YwqoGk8SB6M9J3LhFYp/ZPt2HGJwxhfeCle8AzwR5O+TQPqqm+g==
+// VmLeSq/n3FBnJV5jSycIJoP45nwNXkAs+LFXUmCVJHJ7SJ7kw17tNIk5/I2/FAhbrsK1mL4LLx1Hub5LXXM3/xzxkODDs7+A27aphZ2DVm+BqxOhaHSH/AQPIvvYvjHg5R7D1ElmafINslawpsMUkr7h6oGJR7bF7n6Nny3jTI0pEBnPEc0pbwZWsv+uODahN5kW+BjKC5USC5fl64I2bigN6a8Ujgz7GdE+17WAI6kE2gmuAtVXf0euQjdKt+VhznplHELb9U3riayJB925gs0cBL0hO0rlhV/NTIV4OivL7X4GbLEEodsxqfN+mOSHJEh+krkcsxHabKkBkcMKiw==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Mobile 12.10 core 2.11.355, June 17, 2014. Active patches: 210 ';
+	var bjsversion=' Opera Mobile 12.10 core 2.11.355, July 1, 2014. Active patches: 207 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -490,20 +490,6 @@ function stopKeypressIfDownCancelled(stopKey){
 			addCssToDocument('.footer-search-form span.footer-search-submit input {background:-o-linear-gradient(top,#888,#666);}');
 			log('PATCH-1033, livedoor.com generic issues - Add support for lower case prefixed CSS ');
 		}
-		if(hostname.indexOf('blog.livedoor.')>-1){
-			var cssText = '.cmnTtl01 {background: -o-linear-gradient(top,#6CF,#5BF);}';
-			cssText +='.moreLnk01 a,#globalFooter #footerLogin a {background: -o-linear-gradient(top,#FFF,#EEE);}';
-			cssText +='.cmnTab01 a.active {background: -o-linear-gradient(top,#BBB,#EEE);}';
-			addCssToDocument(cssText);
-			log('PATCH-1044, blog.livedoor.com - add missing gradients');
-		}
-		if(hostname.indexOf('news.livedoor.')>-1){
-			var cssText ='#site-header {background:-o-linear-gradient(top,#D44,#911);}';
-			cssText +='.topics-block-nav li a,.article-list li.more a,div.topics-block-list ul.more-list li a,.border-button-list li,.categoryAd ul li a,p.button a, div.more a,#navigation-sub li a {background:-o-linear-gradient(top,#FFF,#DDD);}';
-			cssText +='.topics-list-pager li:first-child span, .topics-list-pager li:first-child a {background-size: 39px 30px;}';
-			addCssToDocument(cssText);
-			log('PATCH-1041, news.livedoor.com - add missing gradients and icon fix');
-		}
 		if(hostname.indexOf('profile.livedoor.')>-1){
 			var cssText = '#site-header h1 a.profile {background-size: 167px 25px;}';
 			cssText +='#site-header {background:-o-linear-gradient(top,#666,#333);}';
@@ -520,14 +506,6 @@ function stopKeypressIfDownCancelled(stopKey){
 			cssText +='.headBtn a {background: url(/img/lite/arrow_btn.png) no-repeat 6px center,-o-linear-gradient(top,#777,#333);}';
 			addCssToDocument(cssText);
 			log('PATCH-1042, rentalbbs.livedoor.com - add missing gradients');
-		}
-		if(hostname.indexOf('wiki.livedoor.')>-1){
-			var cssText = 'p.more a {background:-o-linear-gradient(top,#BEE,#7CD);}';
-			cssText +='#login .bar-button a {background:-o-linear-gradient(top,#FFF,#EEE);}';
-			cssText +='nav.secondary ul li a.on {background:-o-linear-gradient(top,#FC7,#FB4);}';
-			cssText +='#site-header h1 a.wiki {background-size: 120px 25px!important;}';
-			addCssToDocument(cssText);
-			log('PATCH-1039, wiki.livedoor.com - add missing gradients');
 		}
 		if(hostname.indexOf('www.livedoor.')>-1){
 			var cssText ='.advancedSearchInputChancelButton,a.clearHistory {background: -o-linear-gradient(top,#F32,#B00);}';
