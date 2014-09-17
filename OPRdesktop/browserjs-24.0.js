@@ -1,4 +1,4 @@
-// dK0+JCz7jzgofH3veARatWDRz2EhBGZWSk1+6DXgl36sNiEuOBmTSvlWp9zJleygRD75Ft3IL1mMr8N5aPkizXqNXoTnjSRaRtD+6yr9I3v8kq2T1UJldZomDBww5oAVjNNnYb4k5Ae6S9JTslhkP5Ioe+IfF5BbGrQ2cgPsR2fMj+LzK7euGMe6h321DPEsRsqt62niabBAI4ZYyyHmdNSYlq8tqrtb1C8LpnfMAJVjjmqCDAUD/PcPT4AtZX+n5xiK9SHUhDnbbA51Ls2ejsYsT2YMFCdycnq+qVAk3XSxnU1B1926UcFEfBrVkJoBl0v57nsp2MX/PxuFKGgYHg==
+// k3Q1R0SNC2tubhNsRWoBJVQJ/P7X5uyMf39fqy2yjI9OmxPJoZmlka5MSdzxAQuIJS1MeicizbKKcjNJfN/SyptNL3LyX0ZWNORBuH+e5W/OFoD3EIdAuMhJ+j+QKbxbPaS+mupyt6t142b3IWoO19IFHYW6Uec3Vs5CUScSA3PLqyhHQ/aorqlWfmd56SWGgsOgkx1UgpZ0ofyP5g8n3k/T37LYiW7jhbLB5FyaBHXQPp1LNv7Q5j28qAlFq+LZf+PM7Dh4Vf5Rwk7GkMOYwH8+mT/pa7XEEdVhZld1pHTVSvXKrap6p0Z9826h2L2E8oXKHrl085FT21XD+rs4OQ==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -19,7 +19,7 @@
 	if(location.href.indexOf('operabrowserjs=no')!=-1) {
 		return;
 	}
-	var bjsversion = " Opera OPRDesktop 15.0 core 1387.77, June 17, 2014." +
+	var bjsversion = " Opera OPRDesktop 25.0 core 1555.0, August 21, 2014." +
 					 " Active patches: 16 ";
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -126,9 +126,6 @@
 	} else if(hostname.endsWith('allegro.pl')){
 		addCssToDocument2('*{-webkit-transform: none !important}');
 		log('PATCH-1165, allegro.pl - disable -webkit-transform due to Blink bug');
-	} else if(hostname.endsWith('lingualeo.ru')){
-		addCssToDocument2('div.body-bg-top, div.body-bg-bot {-webkit-transform: none}')
-		log('PATCH-1171, lingualeo.ru - show embedded videos from ted.com');
 	} else if(hostname.endsWith('my.tnt.com')){
 		var _orig_clearPrintBlock;
 		function handleMediaChange(mql) {
@@ -204,10 +201,12 @@
 			log('PATCH-1176, Navigation keys are not working on Google - hide Opera tag from userAgent for all sites except hangouts');
 		}
 	} else if(hostname.indexOf('.youtube.com')>-1){
-		if( navigator.mimeTypes['application/x-shockwave-flash'] && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin ){
+		addCssToDocument2('#movie_player { z-index: 100 !important; }');
+	
+		if( navigator.mimeTypes['application/x-shockwave-flash'] && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin){
 		 HTMLMediaElement.prototype.canPlayType = function(){return ''}
 		}
-		log('PATCH-1164, YouTube force Flash player for HTML5 content');
+		log('PATCH-1185, youtube.com - show video above playlist\nPATCH-1164, YouTube force Flash player for HTML5 content');
 	} else if(hostname.indexOf('opera.com')>-1&& pathname.indexOf('/docs/browserjs/')==0){
 		document.addEventListener('DOMContentLoaded',function(){
 			var browserjs_active = document.getElementById('browserjs_active');
