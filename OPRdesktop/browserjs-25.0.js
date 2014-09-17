@@ -1,4 +1,4 @@
-// k3Q1R0SNC2tubhNsRWoBJVQJ/P7X5uyMf39fqy2yjI9OmxPJoZmlka5MSdzxAQuIJS1MeicizbKKcjNJfN/SyptNL3LyX0ZWNORBuH+e5W/OFoD3EIdAuMhJ+j+QKbxbPaS+mupyt6t142b3IWoO19IFHYW6Uec3Vs5CUScSA3PLqyhHQ/aorqlWfmd56SWGgsOgkx1UgpZ0ofyP5g8n3k/T37LYiW7jhbLB5FyaBHXQPp1LNv7Q5j28qAlFq+LZf+PM7Dh4Vf5Rwk7GkMOYwH8+mT/pa7XEEdVhZld1pHTVSvXKrap6p0Z9826h2L2E8oXKHrl085FT21XD+rs4OQ==
+// U8CZk4spEEtY8tw8it2YdY+C1V7qaxXf/mWzBRkmi8kdcLSMxB+xkzn8pXVN7Ya+rIFA/OrCUcHMOnNlQMYJE5VIHliJC4jgM8BggCR8dUTfXQ3pSZpLExEFOpkK3jyqxGLAuSbAyurGo3TIhWRCGPb15dkZnJAUiA6vaQVvE0bwU5oCcmW3uy4bw4QeL6/e25fZC67fXLoJrDK3Zdv7/RUkUoPAEbU3gfZ+PTGrF+ES9DVzDVRFh5myq+xmFIXIshnlnDgYL4q0WKfX/qWAHIRd4h8dYzFUzvSLVuZwQgSysNyIBSAZgnkSHY+0hN72PTSonwTOfn2TyqQ9vvVaJw==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -19,8 +19,8 @@
 	if(location.href.indexOf('operabrowserjs=no')!=-1) {
 		return;
 	}
-	var bjsversion = " Opera OPRDesktop 25.0 core 1555.0, August 21, 2014." +
-					 " Active patches: 16 ";
+	var bjsversion = " Opera OPRDesktop 25.0 core 1592.0, September 16, 2014." +
+					 " Active patches: 15 ";
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
 
@@ -102,7 +102,7 @@
 				});
 			}, false)
 		}
-		
+
 		log('PATCH-1173, ssc[online][2].{nic,gov}.in - Netscape not supported message - workaround browser sniffing');
 	} else if(hostname.endsWith('.icloud.com')){
 		Object.defineProperty(window, "SC", {
@@ -140,7 +140,7 @@
 				}
 			}
 		}
-		
+
 		document.addEventListener('DOMContentLoaded', function() {
 			var mpl = window.matchMedia("print");
 			mpl.addListener(handleMediaChange);
@@ -167,9 +167,9 @@
 		log('OTWK-21, stanserhorn.ch - fix UDM sniffing');
 	} else if(hostname.indexOf('.google.')>-1){
 		/* Google */
-	
-	
-		if(hostname.contains('docs.google.')){
+
+
+		if(hostname.contains('docs.google.') || hostname.contains('drive.google.')){
 			document.addEventListener('DOMContentLoaded',function(){
 				var elm = document.querySelector('a[href="http://whatbrowser.org"] + a + a');
 				if(elm){elm.click();}
@@ -197,16 +197,12 @@
 			Object.defineProperty(window.navigator, "userAgent", {
 				get: function() {return _newUA}
 			});
-			
+
 			log('PATCH-1176, Navigation keys are not working on Google - hide Opera tag from userAgent for all sites except hangouts');
 		}
 	} else if(hostname.indexOf('.youtube.com')>-1){
 		addCssToDocument2('#movie_player { z-index: 100 !important; }');
-	
-		if( navigator.mimeTypes['application/x-shockwave-flash'] && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin){
-		 HTMLMediaElement.prototype.canPlayType = function(){return ''}
-		}
-		log('PATCH-1185, youtube.com - show video above playlist\nPATCH-1164, YouTube force Flash player for HTML5 content');
+		log('PATCH-1185, youtube.com - show video above playlist');
 	} else if(hostname.indexOf('opera.com')>-1&& pathname.indexOf('/docs/browserjs/')==0){
 		document.addEventListener('DOMContentLoaded',function(){
 			var browserjs_active = document.getElementById('browserjs_active');
@@ -237,7 +233,7 @@
 					if(arg.split('"').length==2)arg+='"';
 					this.__embed_size_attr__ = arg;
 				}
-			});	
+			});
 		}
 		log('PATCH-555, Analytix: add missing end quote');
 	}
