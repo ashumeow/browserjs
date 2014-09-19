@@ -1,4 +1,4 @@
-// k3Q1R0SNC2tubhNsRWoBJVQJ/P7X5uyMf39fqy2yjI9OmxPJoZmlka5MSdzxAQuIJS1MeicizbKKcjNJfN/SyptNL3LyX0ZWNORBuH+e5W/OFoD3EIdAuMhJ+j+QKbxbPaS+mupyt6t142b3IWoO19IFHYW6Uec3Vs5CUScSA3PLqyhHQ/aorqlWfmd56SWGgsOgkx1UgpZ0ofyP5g8n3k/T37LYiW7jhbLB5FyaBHXQPp1LNv7Q5j28qAlFq+LZf+PM7Dh4Vf5Rwk7GkMOYwH8+mT/pa7XEEdVhZld1pHTVSvXKrap6p0Z9826h2L2E8oXKHrl085FT21XD+rs4OQ==
+// U964GHJH5MH8dRg+nENQz/gm1ow385v/6xiWmyeJTM0eGHcJbzTAC01+Mwca0XWLQnz3BgA/M25kZt0E6398KUSIsvrLvsXk8wndFhScZ+7/ZSr7akXY5FXXNmqaYfiDClcQCZMazZU0oDQFvBKX7WICF5CS3YBXCubKu67jhFHRSsODDsrKcCWuwylafxMueG9NlWWwoDsmqGHz/0t0i5AJ6jAEPhOoUiDVUhL7kZ4KA9xA9dDCcsWQf8mHHxr/Dot+/RTIUWU5inCw0ZzT8n57PB+qln3li2BTlM8xfcEUBodltuIGb9EYpsrZ4NCVR4tFYHos+KN86bI8ic2T4Q==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -19,8 +19,8 @@
 	if(location.href.indexOf('operabrowserjs=no')!=-1) {
 		return;
 	}
-	var bjsversion = " Opera OPRDesktop 25.0 core 1555.0, August 21, 2014." +
-					 " Active patches: 16 ";
+	var bjsversion = " Opera OPRDesktop 24.0 core 1555.0, September 18, 2014." +
+					 " Active patches: 17 ";
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
 
@@ -126,6 +126,13 @@
 	} else if(hostname.endsWith('allegro.pl')){
 		addCssToDocument2('*{-webkit-transform: none !important}');
 		log('PATCH-1165, allegro.pl - disable -webkit-transform due to Blink bug');
+	} else if(hostname.endsWith('itunesu.itunes.apple.com')){
+		var _newUA = navigator.userAgent.replace(/ ?OPR.[0-9.]*/, '');
+		Object.defineProperty(window.navigator, "userAgent", {
+			get: function() {return _newUA}
+		});
+		
+		log('PATCH-1187, iTunes U Course Manager - hide Opera tag');
 	} else if(hostname.endsWith('my.tnt.com')){
 		var _orig_clearPrintBlock;
 		function handleMediaChange(mql) {
@@ -169,7 +176,7 @@
 		/* Google */
 	
 	
-		if(hostname.contains('docs.google.')){
+		if(hostname.contains('docs.google.') || hostname.contains('drive.google.')){
 			document.addEventListener('DOMContentLoaded',function(){
 				var elm = document.querySelector('a[href="http://whatbrowser.org"] + a + a');
 				if(elm){elm.click();}

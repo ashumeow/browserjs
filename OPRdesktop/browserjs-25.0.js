@@ -1,4 +1,4 @@
-// U8CZk4spEEtY8tw8it2YdY+C1V7qaxXf/mWzBRkmi8kdcLSMxB+xkzn8pXVN7Ya+rIFA/OrCUcHMOnNlQMYJE5VIHliJC4jgM8BggCR8dUTfXQ3pSZpLExEFOpkK3jyqxGLAuSbAyurGo3TIhWRCGPb15dkZnJAUiA6vaQVvE0bwU5oCcmW3uy4bw4QeL6/e25fZC67fXLoJrDK3Zdv7/RUkUoPAEbU3gfZ+PTGrF+ES9DVzDVRFh5myq+xmFIXIshnlnDgYL4q0WKfX/qWAHIRd4h8dYzFUzvSLVuZwQgSysNyIBSAZgnkSHY+0hN72PTSonwTOfn2TyqQ9vvVaJw==
+// F9PySlRQJqRnBjpJAxvxC3/v8u/lsNwhyJ61IBPGi2j2zrb+KVJhMvV9EhFsQMDMQqOHRI29Hv3xvmNDYz049m1HwmU0w+36vlEA/fsjKiLz+67ulm5BeMiQ25fR36H5UHimTnAF3NYUqqhiXBZGBwQV/CqFduT4Pq20kN/U+OmkYuk0wDemD131MOJ9zFxykOoeQXDBkl1xOrftk4WiSQikwHLuWx5lakAq9BAI06hqIOGnUYxWp+tV4AHrn93n/MXQtHCuZfAn8wblVQomyYXiGK3B+KE2CqOVxk1ZQqXqZfjFdb0n14VD+VnLkCqJKg3XC0t2VGQiemNpkvfeKw==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -19,8 +19,8 @@
 	if(location.href.indexOf('operabrowserjs=no')!=-1) {
 		return;
 	}
-	var bjsversion = " Opera OPRDesktop 25.0 core 1592.0, September 16, 2014." +
-					 " Active patches: 15 ";
+	var bjsversion = " Opera OPRDesktop 25.0 core 1592.0, September 18, 2014." +
+					 " Active patches: 16 ";
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
 
@@ -102,7 +102,7 @@
 				});
 			}, false)
 		}
-
+		
 		log('PATCH-1173, ssc[online][2].{nic,gov}.in - Netscape not supported message - workaround browser sniffing');
 	} else if(hostname.endsWith('.icloud.com')){
 		Object.defineProperty(window, "SC", {
@@ -126,6 +126,13 @@
 	} else if(hostname.endsWith('allegro.pl')){
 		addCssToDocument2('*{-webkit-transform: none !important}');
 		log('PATCH-1165, allegro.pl - disable -webkit-transform due to Blink bug');
+	} else if(hostname.endsWith('itunesu.itunes.apple.com')){
+		var _newUA = navigator.userAgent.replace(/ ?OPR.[0-9.]*/, '');
+		Object.defineProperty(window.navigator, "userAgent", {
+			get: function() {return _newUA}
+		});
+		
+		log('PATCH-1187, iTunes U Course Manager - hide Opera tag');
 	} else if(hostname.endsWith('my.tnt.com')){
 		var _orig_clearPrintBlock;
 		function handleMediaChange(mql) {
@@ -140,7 +147,7 @@
 				}
 			}
 		}
-
+		
 		document.addEventListener('DOMContentLoaded', function() {
 			var mpl = window.matchMedia("print");
 			mpl.addListener(handleMediaChange);
@@ -167,8 +174,8 @@
 		log('OTWK-21, stanserhorn.ch - fix UDM sniffing');
 	} else if(hostname.indexOf('.google.')>-1){
 		/* Google */
-
-
+	
+	
 		if(hostname.contains('docs.google.') || hostname.contains('drive.google.')){
 			document.addEventListener('DOMContentLoaded',function(){
 				var elm = document.querySelector('a[href="http://whatbrowser.org"] + a + a');
@@ -197,7 +204,7 @@
 			Object.defineProperty(window.navigator, "userAgent", {
 				get: function() {return _newUA}
 			});
-
+			
 			log('PATCH-1176, Navigation keys are not working on Google - hide Opera tag from userAgent for all sites except hangouts');
 		}
 	} else if(hostname.indexOf('.youtube.com')>-1){
@@ -233,7 +240,7 @@
 					if(arg.split('"').length==2)arg+='"';
 					this.__embed_size_attr__ = arg;
 				}
-			});
+			});	
 		}
 		log('PATCH-555, Analytix: add missing end quote');
 	}
