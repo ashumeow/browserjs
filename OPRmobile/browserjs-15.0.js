@@ -1,4 +1,4 @@
-// hnAb89O5soI2VuVlgkPYHzUCUPFfWSKC9YacfA+FWM9KWyCHPmvEBsOe673NmooxLjR1PY9zkOykrC1xe27eAuX7MrtkxdBzGogL0/332lqUr/V83T4kRCmrTzOrMaeyX9AMV24b+J+d8G67z1egVOdU7xIsH7Qt8s/gdcrPJ07ijVCQY5raY7ebpc/GnWRAakGjyuLd+P/9D89m6fM3VAdPw3fIFpFMfZz9tLjlck8BNgodBfF5E/p9VZsuAIRuHkkSnsXJpqk+QNFTHjazS5Yiz8YXytmosVVSDHGlYwOH2/b9ssT5jhKR4G2+NnO1SxxmbPGD+VnT4hslxVLWiA==
+// MdGasXY75MKo4/WHUab55j56KV5zMGzjxF2B/zQ4wfL8yi6NpYUUpCl68E0osws8Dsqsz4YMDLA/XRJb0hc4xOAX7gIKb+e009cz4EBXFJN6SeUjs5LMNq4ljb0k+dcPVrPAifAY3DvpMBaJgGtt+MsCADnKAbSpIQVLYpOpfz2y3zxDhBhcOblLreodXVKica3KAZ0MIEgWWEcOh7J3C8WCkncSuSTEnYUzBMI08w2X5CAF0HPDNUsLyHgQwppelxxvHM61Wj0sqHfzz9wmz1u8zqHrk/ZaPi5d/l320F95dRf1hNh5GFzXN3x/HVkJXaetefraArEG4q9CzlKzHw==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -19,8 +19,8 @@
 	if(location.href.indexOf('operabrowserjs=no')!=-1) {
 		return;
 	}
-	var bjsversion = " Opera OPRMobile 15.0 core 1162.59591, June 17, 2014." +
-					 " Active patches: 4 ";
+	var bjsversion = " Opera OPRMobile 15.0 core 1162.59591, October 29, 2014." +
+					 " Active patches: 5 ";
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
 
@@ -126,7 +126,82 @@
 			}
 		});
 		
-		log('PATCH-1178, Google sniffing gone bad - iterate over [A-z]b');
+	
+		        var assignTouchEvents = function(){
+		            var fixScrolling = function (menuElement, v) {
+		                var startPos, topOffset, dist, diff, scrollable;
+		                startPos = topOffset = dist = 0;
+		                var getFullWidth = function () {
+		                    var totalWidth = 0;
+		                    for (var k = 0, length = menuElement.children.length; k < length; k++) {
+		                        totalWidth += menuElement.children[k].offsetWidth;
+		                    }
+		                    return totalWidth;
+		                };
+		                menuElement.style['transform'] = 'translate3d(0,0,0)';
+		                menuElement.addEventListener('touchmove', function (e) {
+		                    if (typeof diff == 'undefined') {
+		                        diff = (v) ? menuElement.parentNode.offsetHeight - menuElement.offsetHeight :
+		                            menuElement.parentNode.offsetWidth - getFullWidth();
+		                        scrollable = (diff < 0);
+		                    }
+		                    if (scrollable) {
+		                        menuElement.style['transition'] = '';
+		                        var touch = (v) ? parseInt(e.changedTouches[0].clientY) : parseInt(e.changedTouches[0].clientX);
+		                        if (startPos === 0) startPos = touch;
+		                        dist = touch - startPos;
+		                        var pos = '(' + ((v) ? 0 : (topOffset + dist)) + 'px, ' + ((v) ? (topOffset + dist) : 0) + 'px, 0px)';
+		                        menuElement.style['transform'] = 'translate3d' + pos;
+		                    }
+		                }, false);
+		                menuElement.addEventListener('touchend', function (e) {
+		                    if (scrollable) {
+		                        startPos = 0;
+		                        topOffset += dist;
+		                        var bottomOffset = diff - topOffset;
+		                        if (topOffset > 0) topOffset = 0;
+		                        if (bottomOffset > 0) topOffset += bottomOffset;
+		                        if (topOffset === 0 || bottomOffset > 0) {
+		                            var pos = '(' + ((v) ? 0 : topOffset) + 'px, ' + ((v) ? topOffset : 0) + 'px, 0px)';
+		                            menuElement.style['transition'] = 'transform 400ms ease-out';
+		                            menuElement.style['transform'] = 'translate3d' + pos;
+		                        }
+		                    }
+		                }, false);
+		            };
+		            var assignEvent = function (search, vert) {
+		                setTimeout(function(){
+		                    var element = document.getElementById(search) || document.getElementsByClassName(search);
+		                    if (null != element && typeof element != 'undefined') {
+		                        if (element.hasOwnProperty('length')) {
+		                            for (var k = 0; k < element.length; k++) {
+		                                fixScrolling(element[k], vert);
+		                            }
+		                        }
+		                        else {
+		                            fixScrolling(element, vert);
+		                        }
+		                    }
+		                }, 1000);
+		            };
+		
+		            assignEvent('gbzc', true); //left side menu
+		            if (location.pathname.indexOf('/search') > -1 || location.pathname.indexOf('/m') > -1) { //apply only to search results
+		                assignEvent('hdtb-mn-cont', false); //search tools
+		                assignEvent('vrtra', false); //horizontal sliders
+		            }
+		        };
+		
+		        window.addEventListener('load', assignTouchEvents, false);
+		        var hash = location.hash;
+		        setInterval(function () {
+		            if (hash !== location.hash) {
+		                hash = location.hash;
+		                assignTouchEvents();
+		            }
+		        }, 1000);
+		
+		log('PATCH-1178, Google sniffing gone bad - iterate over [A-z]b\nPATCH-1188, Google left side menu is not scrollable');
 	} else if(hostname.indexOf('opera.com')>-1&& pathname.indexOf('/docs/browserjs/')==0){
 		document.addEventListener('DOMContentLoaded',function(){
 			var browserjs_active = document.getElementById('browserjs_active');
