@@ -1,4 +1,4 @@
-// ZE5nIWiNJBdrKSKcN3+FW1L5HL7RbNsbL7ksycyCmxrVueQxbgOEhdVLGv1+koPT2Rsdc9E/xERJvR0M9d3/eZMrFm6C+6lPGOcTOXTmhK0cxq4GVoOT9Qzug7kbjpXJvNLDhYi/srjcY7xs4CagPwliER5xc+qwLh65vTraPYSVImOcWtAf8TqCiMG7INAjQK4plJon0rsUJQlgsFRY3b6qTcOS5NF4ChSidRx2jMlkL1kZxdJ1V6QFCXBG+NcNQIv43lvweQIMFhMX/EyASL83oo2zVtSLItIpALqX8Fnlv0ZN0jIxLl1gODg3gbTpRi0DX5OXJ/Uk5TD3CxtoyA==
+// iMyvhAPx9fCjmSbfUnCf03BRD45L1ktH7chguKdZOpdQ8OHrGMtmMQ2IGAxj5ZeR/jAEzRq/ATUX5ZS7cbo9xqvrrIJEhSzi4lxWLz82LEQDMfUSUxTyYpBazv9GwJPD3Ai2WZpmKvNjhgY6H7dFWmg9PI0GigO/DAW0XXMC/YXgw03cyfmpR5hdvagO5JOrKVvkz86pSLSYaeMxcqTbUwJV9tepbRFqdDYECPTaFRRc2/9A1/mQmol9phxY+mC6Sfa1YvxcLE/c6goD5L6ClchL7JUkVd9ZOosV58ZzkkS/TuAlVcVr47v4hcnWBfXXjZa1Hen7OSsOSyhEH3ybog==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Desktop 11.62 core 2.10.229, June 17, 2014. Active patches: 271 ';
+	var bjsversion=' Opera Desktop 11.62 core 2.10.229, October 29, 2014. Active patches: 267 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -735,9 +735,6 @@ function setTinyMCEVersion(e){
 	} else if(hostname.endsWith('aio.meb.gov.tr')){
 		navigator.appName='Netscape';
 		log('PATCH-959, Fix sniffing in old menu');
-	} else if(hostname.endsWith('aldoshoes.com')){
-		document.__defineSetter__('domain', function(){});
-		log('PATCH-808, aldoshoes.com - fix broken document.domain settings');
 	} else if(hostname.endsWith('aliorbank.pl')){
 		addCssToDocument('input,textarea,select{border-width: 0.1em;}');
 		log('PATCH-1071, aliorbank.pl - show invisible borders');
@@ -1075,22 +1072,9 @@ function setTinyMCEVersion(e){
 		opera.defineMagicVariable('goodBrowser',function(){return true},null);
 		
 		log('PATCH-633, No load fires for LINK element if href returns an empty file with text/javascript type - breaks Washingtonpost.com slideshows\nPATCH-494, Washingtonpost: avoid articles being overwritten in race condition\nPATCH-832, Report that Opera is a good browser on The Washington Post');
-	} else if(hostname.endsWith('wikiwatchdog.com')){
-		document.addEventListener('DOMContentLoaded', 
-			function(){
-				document.getElementById('search-form').setAttribute('onsubmit','return false');
-			}
-		,false);
-		log('PATCH-1154, wikiwatchdog.com - prevent default form submit');
 	} else if(hostname.endsWith('www.auf.org')){
 		opera.defineMagicFunction('OldBrowserDetect',function(){return false})
 		log('PATCH-795, auf.org: work around broken sniffer');
-	} else if(hostname.endsWith('www.gvt.com.br')){
-		navigator.userAgent = 'Mozilla/5.0 (Windows NT 5.1; rv:19.0) Gecko/20100101 Firefox/19.0';
-		HTMLHtmlElement.prototype.__defineGetter__('offsetHeight', function(){
-			return  (this.scrollHeight);
-		});
-		log('PATCH-1118, gvt.com.br: browser blocking');
 	} else if(hostname.endsWith('www.zebra.com')){
 		addCssToDocument('div.tabs{content:normal !important}');
 		log('PATCH-1083, zebra.com - generated content on real elements');
@@ -1222,11 +1206,6 @@ function setTinyMCEVersion(e){
 			 }
 			}, false);
 		
-			document.addEventListener('DOMContentLoaded',function(){
-				var elm = document.querySelector('a[href="http://whatbrowser.org"] + a + a');
-				if(elm){elm.click();}
-			},false);
-		
 			opera.addEventListener('AfterEventListener.mousedown', function(e){
 				if( e.event.target && e.event.target.tagName=='OBJECT' ){
 					var ts=(new Date()).getTime();
@@ -1252,7 +1231,14 @@ function setTinyMCEVersion(e){
 					location.search+='&richtext=true';
 				}
 			}
-			log('PATCH-382, Google Spreadsheets cell size and column label size mismatch\nPATCH-1032, Google Docs - auto-close unsupported browser message\nPATCH-482, Delay mousedown event on Flash file upload to make sure Flash sees it\nPATCH-517, docs.google: make document names visible\nPATCH-278, We should not send keypress events for navigation- and function keys\nPATCH-1162, Google Spreadsheets sniffing prevents editing');
+			log('PATCH-382, Google Spreadsheets cell size and column label size mismatch\nPATCH-482, Delay mousedown event on Flash file upload to make sure Flash sees it\nPATCH-517, docs.google: make document names visible\nPATCH-278, We should not send keypress events for navigation- and function keys\nPATCH-1162, Google Spreadsheets sniffing prevents editing');
+		}
+		if(hostname.contains('docs.google.') || hostname.contains('drive.google.')){
+			document.addEventListener('DOMContentLoaded',function(){
+				var elm = document.querySelector('a[href="http://whatbrowser.org"] + a + a');
+				if(elm){elm.click();}
+			},false);
+			log('PATCH-1032, Google Docs - auto-close unsupported browser message');
 		}
 		if(hostname.contains('plus.google.')){
 			(function(ps){ 
@@ -1903,11 +1889,6 @@ function setTinyMCEVersion(e){
 	
 		fakeCSSFilters();
 		log('PATCH-112, weather.news.qq.com expects getElementById() to find named elements\nOTW-4861, qq.com uses IE-style CSS filters');
-	} else if(hostname.indexOf('oakley.com')>-1){
-		opera.addEventListener('BeforeCSS', function(e){
-		  e.cssText = e.cssText.replace(/#nav ul#nav_primary li.dd_link .dd ul li ul,\n#nav ul#nav_primary li.dd_link .dd a.category:after/g,'#nav ul#nav_primary li.dd_link .dd a.category:after');
-		}, false);
-		log('PATCH-664, oakley.com: abuse of CSS content on real elements');
 	} else if(hostname.indexOf('opera.com')>-1&& pathname.indexOf('/docs/browserjs/')==0){
 		document.addEventListener('DOMContentLoaded',function(){
 			var browserjs_active = document.getElementById('browserjs_active');
