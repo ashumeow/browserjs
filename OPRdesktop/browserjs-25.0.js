@@ -1,4 +1,4 @@
-// F9PySlRQJqRnBjpJAxvxC3/v8u/lsNwhyJ61IBPGi2j2zrb+KVJhMvV9EhFsQMDMQqOHRI29Hv3xvmNDYz049m1HwmU0w+36vlEA/fsjKiLz+67ulm5BeMiQ25fR36H5UHimTnAF3NYUqqhiXBZGBwQV/CqFduT4Pq20kN/U+OmkYuk0wDemD131MOJ9zFxykOoeQXDBkl1xOrftk4WiSQikwHLuWx5lakAq9BAI06hqIOGnUYxWp+tV4AHrn93n/MXQtHCuZfAn8wblVQomyYXiGK3B+KE2CqOVxk1ZQqXqZfjFdb0n14VD+VnLkCqJKg3XC0t2VGQiemNpkvfeKw==
+// OBhkSsbazCvVcNdSX6ZSiiLlaP9cY90kkE1Jwtdj2lt4zFSgAf/kIMplCAaSEyw4yUg5qgkP0Tw41yt5UrVIdn/z4dU+4XiZiKjrAIky6jF/ZawtKzFQMNaCAu9AL+DW1zOvEgPVKdB7HCr+hha7t++n5pMhK/S6NEXlhsgRBR7rfTwJTg04UgOejRl0V4F51qX6HNGpLD4may1Ke6ZnSPhMgnvftf3t+BCNqf+pY+lj8RLmogPcVc8IcdRrAtm/3bLIcMUUqZEaJG0d35D582w75VYf2w94D8RfsFtc4tsLYGT2sPiRGX3bbk7GEqgW/sqe3H5UJGjOqd4Qi1PdJw==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -19,7 +19,7 @@
 	if(location.href.indexOf('operabrowserjs=no')!=-1) {
 		return;
 	}
-	var bjsversion = " Opera OPRDesktop 25.0 core 1592.0, September 18, 2014." +
+	var bjsversion = " Opera OPRDesktop 25.0 core 1592.0, November 27, 2014." +
 					 " Active patches: 16 ";
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -123,9 +123,17 @@
 			}
 		});
 		log('PATCH-1174, iCloud iWork new document stays blank - camouflage as Chrome');
-	} else if(hostname.endsWith('allegro.pl')){
-		addCssToDocument2('*{-webkit-transform: none !important}');
-		log('PATCH-1165, allegro.pl - disable -webkit-transform due to Blink bug');
+	} else if(hostname.endsWith('delta.com')){
+		var UnsupportedBrowser;
+		Object.defineProperty(window, "UnsupportedBrowser", {
+			get: function(){return UnsupportedBrowser},
+			set: function(arg) {
+				arg.badBrowser=function(){return false};
+				UnsupportedBrowser = arg;
+			}
+		});
+		
+		log('PATCH-1190, Delta.com shows browser warning to Opera 25');
 	} else if(hostname.endsWith('itunesu.itunes.apple.com')){
 		var _newUA = navigator.userAgent.replace(/ ?OPR.[0-9.]*/, '');
 		Object.defineProperty(window.navigator, "userAgent", {
