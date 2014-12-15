@@ -1,4 +1,4 @@
-// dK0+JCz7jzgofH3veARatWDRz2EhBGZWSk1+6DXgl36sNiEuOBmTSvlWp9zJleygRD75Ft3IL1mMr8N5aPkizXqNXoTnjSRaRtD+6yr9I3v8kq2T1UJldZomDBww5oAVjNNnYb4k5Ae6S9JTslhkP5Ioe+IfF5BbGrQ2cgPsR2fMj+LzK7euGMe6h321DPEsRsqt62niabBAI4ZYyyHmdNSYlq8tqrtb1C8LpnfMAJVjjmqCDAUD/PcPT4AtZX+n5xiK9SHUhDnbbA51Ls2ejsYsT2YMFCdycnq+qVAk3XSxnU1B1926UcFEfBrVkJoBl0v57nsp2MX/PxuFKGgYHg==
+// OBhkSsbazCvVcNdSX6ZSiiLlaP9cY90kkE1Jwtdj2lt4zFSgAf/kIMplCAaSEyw4yUg5qgkP0Tw41yt5UrVIdn/z4dU+4XiZiKjrAIky6jF/ZawtKzFQMNaCAu9AL+DW1zOvEgPVKdB7HCr+hha7t++n5pMhK/S6NEXlhsgRBR7rfTwJTg04UgOejRl0V4F51qX6HNGpLD4may1Ke6ZnSPhMgnvftf3t+BCNqf+pY+lj8RLmogPcVc8IcdRrAtm/3bLIcMUUqZEaJG0d35D582w75VYf2w94D8RfsFtc4tsLYGT2sPiRGX3bbk7GEqgW/sqe3H5UJGjOqd4Qi1PdJw==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -19,7 +19,7 @@
 	if(location.href.indexOf('operabrowserjs=no')!=-1) {
 		return;
 	}
-	var bjsversion = " Opera OPRDesktop 15.0 core 1387.77, June 17, 2014." +
+	var bjsversion = " Opera OPRDesktop 25.0 core 1592.0, November 27, 2014." +
 					 " Active patches: 16 ";
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -123,12 +123,24 @@
 			}
 		});
 		log('PATCH-1174, iCloud iWork new document stays blank - camouflage as Chrome');
-	} else if(hostname.endsWith('allegro.pl')){
-		addCssToDocument2('*{-webkit-transform: none !important}');
-		log('PATCH-1165, allegro.pl - disable -webkit-transform due to Blink bug');
-	} else if(hostname.endsWith('lingualeo.ru')){
-		addCssToDocument2('div.body-bg-top, div.body-bg-bot {-webkit-transform: none}')
-		log('PATCH-1171, lingualeo.ru - show embedded videos from ted.com');
+	} else if(hostname.endsWith('delta.com')){
+		var UnsupportedBrowser;
+		Object.defineProperty(window, "UnsupportedBrowser", {
+			get: function(){return UnsupportedBrowser},
+			set: function(arg) {
+				arg.badBrowser=function(){return false};
+				UnsupportedBrowser = arg;
+			}
+		});
+		
+		log('PATCH-1190, Delta.com shows browser warning to Opera 25');
+	} else if(hostname.endsWith('itunesu.itunes.apple.com')){
+		var _newUA = navigator.userAgent.replace(/ ?OPR.[0-9.]*/, '');
+		Object.defineProperty(window.navigator, "userAgent", {
+			get: function() {return _newUA}
+		});
+		
+		log('PATCH-1187, iTunes U Course Manager - hide Opera tag');
 	} else if(hostname.endsWith('my.tnt.com')){
 		var _orig_clearPrintBlock;
 		function handleMediaChange(mql) {
@@ -172,7 +184,7 @@
 		/* Google */
 	
 	
-		if(hostname.contains('docs.google.')){
+		if(hostname.contains('docs.google.') || hostname.contains('drive.google.')){
 			document.addEventListener('DOMContentLoaded',function(){
 				var elm = document.querySelector('a[href="http://whatbrowser.org"] + a + a');
 				if(elm){elm.click();}
@@ -204,10 +216,8 @@
 			log('PATCH-1176, Navigation keys are not working on Google - hide Opera tag from userAgent for all sites except hangouts');
 		}
 	} else if(hostname.indexOf('.youtube.com')>-1){
-		if( navigator.mimeTypes['application/x-shockwave-flash'] && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin ){
-		 HTMLMediaElement.prototype.canPlayType = function(){return ''}
-		}
-		log('PATCH-1164, YouTube force Flash player for HTML5 content');
+		addCssToDocument2('#movie_player { z-index: 100 !important; }');
+		log('PATCH-1185, youtube.com - show video above playlist');
 	} else if(hostname.indexOf('opera.com')>-1&& pathname.indexOf('/docs/browserjs/')==0){
 		document.addEventListener('DOMContentLoaded',function(){
 			var browserjs_active = document.getElementById('browserjs_active');

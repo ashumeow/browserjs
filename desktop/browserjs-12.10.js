@@ -1,4 +1,4 @@
-// arx4WSbAI0W2ybb0hlerFFnvbmfP0pV5wiDkeqSmVjfIfEo4Y+68IWVk9NWGfGEPA3YtPSJweEyzNwFMLUJkP5KspHpPDqcBDl/DAh42B3Y1LRS/ls+gR2hMjDJ+dXwb/l8C4Zwe+h8dLQCt7aBboLIKMUbhomgYfmBD45wcwDO5odP3QQGh7AjgQY2gGtDCLvIif1RiOLdJdJnB7cp55bKLQmk5I9AsVMpH2coPrEe/AWvn0kdGExHC0QfbInQhBKUj/XFngDseFrORn8BjMClSgl4oa9wO3qsDyST1aMLwIOw1YjeRFBxWJbD6y2DlIh2m6yTlH6skkZWHHpq4PQ==
+// RgoYwdit49VglWnL1cEuzSj9BEd1zWYoLj9MC83cdcHWmK/b4oZtnACuvqbihCAo1pPnN844T/HKvf+vSLhd4rn2Gx3TghJiiHp4sPnmoWjMxNrs0dJfFc0setjWxI3zIhlJKPYFQB1u/TPIp0gCN9GJ9+fUKb5k9TevYb/YjCq7SO+MzSoT2Hb9UiBFmv2xFAUnuxDn2Lofsdd3aJv6ttQESBpoMBKNtObCPWQdN7bbboPDIEn9RrW8jhud9t9nKBfablzsbsDbqgM3UOCvQxAdbVFO5sryrCLJG6eu2wAx5AEtD5KCzqSHMsrSW7lzEvTAJ2FyrQ5lJixhBv+03Q==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Desktop 12.10 core 2.12.388, June 17, 2014. Active patches: 282 ';
+	var bjsversion=' Opera Desktop 12.10 core 2.12.388, October 29, 2014. Active patches: 272 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -794,24 +794,12 @@ function undoFunctionKeypressEventRemoval(){
 		addPreprocessHandler(/dojo\.isOpera/g , 'false', false, function(el){return !el.src});
 		
 		log('PATCH-1065 , polskastacja.pl - fix stream selection drop-down.');
-	} else if(hostname.endsWith('.qidian.com')){
-		opera.addEventListener('BeforeCSS',function(e){
-			var ohref = e.element.getAttribute('href');
-			var rhref = e.element.href;
-			if( rhref!=ohref && rhref.indexOf(hostname)==-1 && rhref.match(/(default|Channel|BookStore2)\.css/) ){
-				e.element.href = location.protocol+'//'+hostname+ohref;
-			}
-		},false);
-		log('PATCH-1072, qidian.com - work around base resolving issue in Presto');
 	} else if(hostname.endsWith('.tsn.ca')){
 		window.addEventListener('load', function(){$(document).triggerHandler("onload.etsapi")}, false);
 		log('PATCH-1028, Dispatch of the "video player ready" event happens before event listener is added due to blocking DOM-added scripts, fire it again');
 	} else if(hostname.endsWith('aio.meb.gov.tr')){
 		navigator.appName='Netscape';
 		log('PATCH-959, Fix sniffing in old menu');
-	} else if(hostname.endsWith('aldoshoes.com')){
-		document.__defineSetter__('domain', function(){});
-		log('PATCH-808, aldoshoes.com - fix broken document.domain settings');
 	} else if(hostname.endsWith('aliorbank.pl')){
 		addCssToDocument('input,textarea,select{border-width: 0.1em;}');
 		log('PATCH-1071, aliorbank.pl - show invisible borders');
@@ -1000,17 +988,6 @@ function undoFunctionKeypressEventRemoval(){
 	} else if(hostname.endsWith('loyalbank.com')){
 		HTMLElement.prototype.onselectstart = true;
 		log('PATCH-707, loyalbank.com: prevent mousedown prevention');
-	} else if(hostname.endsWith('lucasarts.com')){
-		opera.addEventListener('BeforeScript',function(ev){
-			var name=ev.element.src; 
-			if(!name){return;}
-			if(name.indexOf('hive.min.js')>-1){
-				ev.element.text = ev.element.text.replace('e.style.animationName&&(t=!0);','e.style.animationName!==undefined&&(t=!0);');
-				ev.element.text = ev.element.text.replace('"translate3d(-"+r+"px,0,0)"','"translateX(-"+r+"px)"');
-			}
-		},false);
-		addCssToDocument('.home #landing #landing-image .gallery-item-container.closed {display: none;}');
-		log('PATCH-998, lucasarts.com - fix compatibility with hive');
 	} else if(hostname.endsWith('lymingtonharbour.co.uk')){
 		fixHVMenu();
 		log('PATCH-1110, lymingtonharbour.co.uk - HVmenu');
@@ -1047,9 +1024,6 @@ function undoFunctionKeypressEventRemoval(){
 		}, false);
 		
 		log('PATCH-743, webs.com - fix reference to stylesheet variable');
-	} else if(hostname.endsWith('msn.foxsports.com')){
-		opera.defineMagicVariable('_dapUtils', function(obj){ obj.is_opera=false; return obj; }, null);
-		log('PATCH-1046, msn.foxsports.com - close iframe so comments can load.');
 	} else if(hostname.endsWith('mycoast.cccd.edu')){
 		opera.defineMagicVariable('is_fox',function(){return true},null);
 		log('PATCH-804, mycoast.cccd.edu: block browser block');
@@ -1208,13 +1182,6 @@ function undoFunctionKeypressEventRemoval(){
 		opera.defineMagicVariable('goodBrowser',function(){return true},null);
 		
 		log('PATCH-633, No load fires for LINK element if href returns an empty file with text/javascript type - breaks Washingtonpost.com slideshows\nPATCH-494, Washingtonpost: avoid articles being overwritten in race condition\nPATCH-832, Report that Opera is a good browser on The Washington Post');
-	} else if(hostname.endsWith('wikiwatchdog.com')){
-		document.addEventListener('DOMContentLoaded', 
-			function(){
-				document.getElementById('search-form').setAttribute('onsubmit','return false');
-			}
-		,false);
-		log('PATCH-1154, wikiwatchdog.com - prevent default form submit');
 	} else if(hostname.endsWith('www.auf.org')){
 		opera.defineMagicFunction('OldBrowserDetect',function(){return false})
 		log('PATCH-795, auf.org: work around broken sniffer');
@@ -1224,27 +1191,12 @@ function undoFunctionKeypressEventRemoval(){
 	} else if(hostname.endsWith('www.dr.dk')){
 		addPreprocessHandler(/if\s*\(Browser\.ie\s*&&\s*isNaN\(parseFloat\(result\)\)\)\{/,'if (Browser.opera && isNaN(parseFloat(result))){',true,function(elm){ return elm.src&&elm.src.indexOf('base.js')>-1});
 		log('PATCH-962, dr.dk: fix misnested browser sniff');
-	} else if(hostname.endsWith('www.expostas.com')){
-		addCssToDocument('a[target="_blank"]::after{content: "\u200B"}');
-		log('PATCH-928, expostas.com - add word break opportunity');
 	} else if(hostname.endsWith('www.finanzas.com')){
 		addCssToDocument('body{content: normal !important}');
 		log('PATCH-901, finanzas.com: work around generated content abuse');
 	} else if(hostname.endsWith('www.fotoromantika.ru')){
 		addCssToDocument('div.HorizontalBar{float:left}');
 		log('PATCH-1119, fotoromantika.ru: fix float');
-	} else if(hostname.endsWith('www.gvt.com.br')){
-		navigator.userAgent = 'Mozilla/5.0 (Windows NT 5.1; rv:19.0) Gecko/20100101 Firefox/19.0';
-		HTMLHtmlElement.prototype.__defineGetter__('offsetHeight', function(){
-			return  (this.scrollHeight);
-		});
-		log('PATCH-1118, gvt.com.br: browser blocking');
-	} else if(hostname.endsWith('www.lifehacker.jp')){
-		addCssToDocument('#newzia_connect_main ul > li > a > div > img, #newzia_connect_main ul > li > a > div > p.ncDescription{top:0}');
-		log('PATCH-1111, lifehacker: re-style abs.pos boxes');
-	} else if(hostname.endsWith('www.lingvo.ru')){
-		addPreprocessHandler(/a\.unselectable="on";if\(window\.opera\)\{a\.onmousedown=function\(\)\{return\s*false\}\}/,'a.unselectable="on";if(!window.opera){a.onmousedown=function(){return false}}');
-		log('PATCH-925, lingvo.ru: prevent mousedown prevention');
 	} else if(hostname.endsWith('www.state.gov')){
 		opera.addEventListener('BeforeScript',function(e){
 			if(e.element.src.indexOf('sifr-config.js')>-1){e.preventDefault();}
@@ -1383,11 +1335,6 @@ function undoFunctionKeypressEventRemoval(){
 				}
 			}, false);
 		
-			document.addEventListener('DOMContentLoaded',function(){
-				var elm = document.querySelector('a[href="http://whatbrowser.org"] + a + a');
-				if(elm){elm.click();}
-			},false);
-		
 			opera.addEventListener('BeforeEvent.keydown',function(e){
 				if(e.event.key=="Tab"){e.event.preventDefault();}
 			},false);
@@ -1399,7 +1346,14 @@ function undoFunctionKeypressEventRemoval(){
 					location.search+='&richtext=true';
 				}
 			}
-			log('PATCH-977, Google Documents copy paste\nPATCH-1032, Google Docs - auto-close unsupported browser message\nPATCH-1081, Google Docs - Tab key only works once\nPATCH-382, Google Spreadsheets cell highligh mismatch and key event\nPATCH-1162, Google Spreadsheets sniffing prevents editing');
+			log('PATCH-977, Google Documents copy paste\nPATCH-1081, Google Docs - Tab key only works once\nPATCH-382, Google Spreadsheets cell highligh mismatch and key event\nPATCH-1162, Google Spreadsheets sniffing prevents editing');
+		}
+		if(hostname.contains('docs.google.') || hostname.contains('drive.google.')){
+			document.addEventListener('DOMContentLoaded',function(){
+				var elm = document.querySelector('a[href="http://whatbrowser.org"] + a + a');
+				if(elm){elm.click();}
+			},false);
+			log('PATCH-1032, Google Docs - auto-close unsupported browser message');
 		}
 		if(hostname.contains('play.google')){
 			undoFunctionKeypressEventRemoval();
@@ -1974,11 +1928,6 @@ function undoFunctionKeypressEventRemoval(){
 	
 		fakeCSSFilters();
 		log('PATCH-112, weather.news.qq.com expects getElementById() to find named elements\nOTW-4861, qq.com uses IE-style CSS filters');
-	} else if(hostname.indexOf('oakley.com')>-1){
-		opera.addEventListener('BeforeCSS', function(e){
-		  e.cssText = e.cssText.replace(/#nav ul#nav_primary li.dd_link .dd ul li ul,\n#nav ul#nav_primary li.dd_link .dd a.category:after/g,'#nav ul#nav_primary li.dd_link .dd a.category:after');
-		}, false);
-		log('PATCH-664, oakley.com: abuse of CSS content on real elements');
 	} else if(hostname.indexOf('officeapps.live.com')>-1){
 		/* Microsoft Office Web Apps */
 	

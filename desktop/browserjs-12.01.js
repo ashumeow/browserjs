@@ -1,4 +1,4 @@
-// e3UyXOGvw3/aI8NxgPxMfMA7e7fYJ/4UzMxVtCAP+Pjs4EmAPTgduNI6F0M5yrjkiK7n+J7JaLYEqVKV/boF+ddYgabovrckGnb18SO7TFKaUXkiTlczL664Wo2IRqu5OyANA2Jk5y5CNeEcBHFmu7VkAZYX9fgjtb/x5ErbMnu9Qi6oV44myWZtBKdvHT0rEk6yTAof8vSEysd/wJqohoLCYjn73hVTsevtrYGPfqFrqqrxYST+SLIMVI9WEFTXOCW+jxq6EzAdGXuxxFAt1vbSUjFM0j3WsN6Kf/k5hFDEKmtImg8ERQ7aUFVQNQnVTsAY7yDzPLna7EVGA96OTw==
+// cwCasfmrbCNZKelgVlgrnvC7x/s2dnWagmDXnXDy3QeXNTGPQpdZN0PJUvqzu5nCNjC76XMEusgeQ1LIn1d+anvjE0aJ/PR/6ptYW8eRmryX5D/LbGkuX2qwnpedLgwRvjCZJE2NW0WSHuZcac2mpRsDcAakmWbX24jD2v8ziOQcliyTGHEYTUQ8iH3GfXs1OAnfaFjjKbhiP0eYXbtymwKEXkOoi3QOFH1XRwySZ2gD0ImSCfB2dLm/J+aI99w6bf9LOpYVHKLCvY1abl8JhUBqoWmTa3MYuYAoxXATVBDss9niZFwykwXoYdvOVXHi06371d7brX078zclK4EqQw==
 /**
 ** Copyright (C) 2000-2014 Opera Software ASA.  All rights reserved.
 **
@@ -18,7 +18,7 @@
 (function(opera){
 	if(!opera || opera._browserjsran)return;
 	opera._browserjsran=true;
-	var bjsversion=' Opera Desktop 12.01 core 2.10.289, June 17, 2014. Active patches: 298 ';
+	var bjsversion=' Opera Desktop 12.01 core 2.10.289, October 29, 2014. Active patches: 291 ';
 	// variables and utility functions
 	var navRestore = {}; // keep original navigator.* values
 	var shouldRestore = false;
@@ -787,9 +787,6 @@ function setTinyMCEVersion(e){
 	} else if(hostname.endsWith('airbnb.com')){
 		fixTransitionEndCase();
 		log('PATCH-935, Fix case for transitionend event on airbnb.com.');
-	} else if(hostname.endsWith('aldoshoes.com')){
-		document.__defineSetter__('domain', function(){});
-		log('PATCH-808, aldoshoes.com - fix broken document.domain settings');
 	} else if(hostname.endsWith('aliorbank.pl')){
 		addCssToDocument('input,textarea,select{border-width: 0.1em;}');
 		log('PATCH-1071, aliorbank.pl - show invisible borders');
@@ -1198,13 +1195,6 @@ function setTinyMCEVersion(e){
 		opera.defineMagicVariable('goodBrowser',function(){return true},null);
 		
 		log('PATCH-633, No load fires for LINK element if href returns an empty file with text/javascript type - breaks Washingtonpost.com slideshows\nPATCH-494, Washingtonpost: avoid articles being overwritten in race condition\nPATCH-832, Report that Opera is a good browser on The Washington Post');
-	} else if(hostname.endsWith('wikiwatchdog.com')){
-		document.addEventListener('DOMContentLoaded', 
-			function(){
-				document.getElementById('search-form').setAttribute('onsubmit','return false');
-			}
-		,false);
-		log('PATCH-1154, wikiwatchdog.com - prevent default form submit');
 	} else if(hostname.endsWith('www.auf.org')){
 		opera.defineMagicFunction('OldBrowserDetect',function(){return false})
 		log('PATCH-795, auf.org: work around broken sniffer');
@@ -1214,27 +1204,12 @@ function setTinyMCEVersion(e){
 	} else if(hostname.endsWith('www.dr.dk')){
 		addPreprocessHandler(/if\s*\(Browser\.ie\s*&&\s*isNaN\(parseFloat\(result\)\)\)\{/,'if (Browser.opera && isNaN(parseFloat(result))){',true,function(elm){ return elm.src&&elm.src.indexOf('base.js')>-1});
 		log('PATCH-962, dr.dk: fix misnested browser sniff');
-	} else if(hostname.endsWith('www.expostas.com')){
-		addCssToDocument('a[target="_blank"]::after{content: "\u200B"}');
-		log('PATCH-928, expostas.com - add word break opportunity');
 	} else if(hostname.endsWith('www.finanzas.com')){
 		addCssToDocument('body{content: normal !important}');
 		log('PATCH-901, finanzas.com: work around generated content abuse');
 	} else if(hostname.endsWith('www.fotoromantika.ru')){
 		addCssToDocument('div.HorizontalBar{float:left}');
 		log('PATCH-1119, fotoromantika.ru: fix float');
-	} else if(hostname.endsWith('www.gvt.com.br')){
-		navigator.userAgent = 'Mozilla/5.0 (Windows NT 5.1; rv:19.0) Gecko/20100101 Firefox/19.0';
-		HTMLHtmlElement.prototype.__defineGetter__('offsetHeight', function(){
-			return  (this.scrollHeight);
-		});
-		log('PATCH-1118, gvt.com.br: browser blocking');
-	} else if(hostname.endsWith('www.lifehacker.jp')){
-		addCssToDocument('#newzia_connect_main ul > li > a > div > img, #newzia_connect_main ul > li > a > div > p.ncDescription{top:0}');
-		log('PATCH-1111, lifehacker: re-style abs.pos boxes');
-	} else if(hostname.endsWith('www.lingvo.ru')){
-		addPreprocessHandler(/a\.unselectable="on";if\(window\.opera\)\{a\.onmousedown=function\(\)\{return\s*false\}\}/,'a.unselectable="on";if(!window.opera){a.onmousedown=function(){return false}}');
-		log('PATCH-925, lingvo.ru: prevent mousedown prevention');
 	} else if(hostname.endsWith('www.state.gov')){
 		opera.addEventListener('BeforeScript',function(e){
 			if(e.element.src.indexOf('sifr-config.js')>-1){e.preventDefault();}
@@ -1375,11 +1350,6 @@ function setTinyMCEVersion(e){
 			 }
 			}, false);
 		
-			document.addEventListener('DOMContentLoaded',function(){
-				var elm = document.querySelector('a[href="http://whatbrowser.org"] + a + a');
-				if(elm){elm.click();}
-			},false);
-		
 			addCssToDocument('td.doclist-td-checkbox, td.doclist-td-name, td.doclist-td-star {width:auto !important}');
 		
 			document.addEventListener('load', function(e){
@@ -1398,7 +1368,14 @@ function setTinyMCEVersion(e){
 					location.search+='&richtext=true';
 				}
 			}
-			log('PATCH-382, Google Spreadsheets cell size and column label size mismatch\nPATCH-1032, Google Docs - auto-close unsupported browser message\nPATCH-517, docs.google: make document names visible\nPATCH-278, We should not send keypress events for navigation- and function keys\nPATCH-1162, Google Spreadsheets sniffing prevents editing');
+			log('PATCH-382, Google Spreadsheets cell size and column label size mismatch\nPATCH-517, docs.google: make document names visible\nPATCH-278, We should not send keypress events for navigation- and function keys\nPATCH-1162, Google Spreadsheets sniffing prevents editing');
+		}
+		if(hostname.contains('docs.google.') || hostname.contains('drive.google.')){
+			document.addEventListener('DOMContentLoaded',function(){
+				var elm = document.querySelector('a[href="http://whatbrowser.org"] + a + a');
+				if(elm){elm.click();}
+			},false);
+			log('PATCH-1032, Google Docs - auto-close unsupported browser message');
 		}
 		if(hostname.contains('plus.google.')){
 			addCssToDocument('div.B-u-nd-nb, div.s-r-Ge-ec {display:block}');
@@ -2031,11 +2008,6 @@ function setTinyMCEVersion(e){
 	
 		fakeCSSFilters();
 		log('PATCH-112, weather.news.qq.com expects getElementById() to find named elements\nOTW-4861, qq.com uses IE-style CSS filters');
-	} else if(hostname.indexOf('oakley.com')>-1){
-		opera.addEventListener('BeforeCSS', function(e){
-		  e.cssText = e.cssText.replace(/#nav ul#nav_primary li.dd_link .dd ul li ul,\n#nav ul#nav_primary li.dd_link .dd a.category:after/g,'#nav ul#nav_primary li.dd_link .dd a.category:after');
-		}, false);
-		log('PATCH-664, oakley.com: abuse of CSS content on real elements');
 	} else if(hostname.indexOf('officeapps.live.com')>-1){
 		/* Microsoft Office Web Apps */
 	
